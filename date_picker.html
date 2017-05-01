@@ -17,34 +17,82 @@
         table td {
             background: #fff;
             padding: 0.5em;
-            text-align: right;
+            cursor: default;
         }
-        table td.date {
-            color: #aaa;
+        table td.date-cell,
+        table td.jump2today-cell,
+        table td.next-year-cell,
+        table td.previous-year-cell,
+        table td.next-month-cell,
+        table td.previous-month-cell {
             cursor: pointer;
         }
-        table td.date span {
+        table td.date-cell:hover,
+        table td.jump2today-cell:hover,
+        table td.next-year-cell:hover,
+        table td.previous-year-cell:hover,
+        table td.next-month-cell:hover,
+        table td.previous-month-cell:hover {
+            background: #eee;
+        }
+        table .top-block,
+        table .bottom-block {
+            text-align: center;
+        }
+        table .calendar-block {
+            text-align: right;
+        }
+        table td.date-cell {
+            color: #aaa;
+        }
+        table td.date-cell span {
             display: block;
         }
-        table td.date[data-monthPos="0"] {
+        table td.date-cell.current-month {
             color: #000;
         }
-        table td.date[data-datePos="0"] {
+        table td.date-cell.current-date {
             background: #ddd;
         }
-        table td.date.today {
+        table td.date-cell.today {
             color: #f40;
+        }
+        table td.jump2today-cell span:before {
+            content: "Today";
+        }
+        table td.year-cell span:before {
+            content: "Year ";
+        }
+        table td.next-year-cell span:before,
+        table td.next-month-cell span:before {
+            content: ">";
+        }
+        table td.previous-year-cell span:before,
+        table td.previous-month-cell span:before {
+            content: "<";
         }
 
     </style>
 </head>
 <body>
+    <form>
+        <label for="date">Choose date:</label>
+        <input type="text" name="date" id="date">
+    </form>
     <div class="datetime-picker" id="date_picker"></div>
     <script src="datetime.js"></script>
     <script>
         var startTime = new Date();
-        new DatetimePicker("date", "2017-4-28", {
+        new DatetimePicker("date", "2017/5/20", {
             "weekdays": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
+        }, {
+            "change": function (current) {
+                document.getElementById("date").value
+                        = "Y/m/d"
+                        .replace(/Y/g, current.year)
+                        .replace(/m/g, current.month + 1)
+                        .replace(/d/g, current.date);
+            }
         }).widget(document.getElementById("date_picker"), {
             "displayBeforeWeeks": 0,
             "displayAfterWeeks": 0
