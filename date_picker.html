@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Date picker</title>
+    <style>
+        html {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: #000;
+        }
+        table {
+            border-collapse: separate;
+            border-spacing: 1px;
+            background: #ccc;
+        }
+        table td {
+            background: #fff;
+            padding: 0.5em;
+            text-align: right;
+        }
+        table td.date {
+            color: #aaa;
+            cursor: pointer;
+        }
+        table td.date span {
+            display: block;
+        }
+        table td.date[data-monthPos="0"] {
+            color: #000;
+        }
+        table td.date[data-datePos="0"] {
+            background: #ddd;
+        }
+        table td.date.today {
+            color: #f40;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="datetime-picker" id="date_picker"></div>
+    <script src="datetime.js"></script>
+    <script>
+        var startTime = new Date();
+        new DatetimePicker("date", "2017-4-28", {
+            "weekdays": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
+        }).widget(document.getElementById("date_picker"), {
+            "displayBeforeWeeks": 0,
+            "displayAfterWeeks": 0
+        });
+        console.log("Duration: " + (new Date() - startTime) + "ms");
+    </script>
+</body>
+</html>
