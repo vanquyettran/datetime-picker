@@ -83,15 +83,19 @@
     <script src="datetime.js"></script>
     <script>
         var startTime = new Date();
-        new DatetimePicker("date", "2017/5/20", {
+        new DatetimePicker("2017/5/20 21:10:20", {
             "weekdays": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
         }, {
             "change": function (current) {
                 document.getElementById("date").value
-                        = "Y/m/d"
+                    = "Y/m/d H:i:s"
                         .replace(/Y/g, current.year)
                         .replace(/m/g, current.month + 1)
-                        .replace(/d/g, current.date);
+                        .replace(/d/g, current.date)
+                        .replace(/H/g, current.hours)
+                        .replace(/i/g, current.minutes)
+                        .replace(/s/g, current.seconds)
+                        ;
             }
         }).widget(document.getElementById("date_picker"), {
             "displayBeforeWeeks": 0,
