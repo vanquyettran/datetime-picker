@@ -79,28 +79,36 @@
         <label for="date">Choose date:</label>
         <input type="text" name="date" id="date">
     </form>
-    <div class="datetime-picker" id="date_picker"></div>
+    <table class="datetime-picker" id="date_picker"></table>
     <script src="datetime.js"></script>
     <script>
-        var startTime = new Date();
-        new DatetimePicker("2017/5/20 21:10:20", {
-            "weekdays": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
-        }, {
-            "change": function (current) {
-                document.getElementById("date").value
-                    = "Y/m/d H:i:s"
-                        .replace(/Y/g, current.year)
-                        .replace(/m/g, current.month + 1)
-                        .replace(/d/g, current.date)
-                        .replace(/H/g, current.hours)
-                        .replace(/i/g, current.minutes)
-                        .replace(/s/g, current.seconds)
-                        ;
+        var startTime = new Date()
+
+        var datetimePicker = new DatetimePicker(
+            document.getElementById("date_picker"),
+            "2017/5/20 21:10:20",
+            {
+                "weekdays": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
             }
-        }).widget(document.getElementById("date_picker"), {
+        ).widget({
             "displayBeforeWeeks": 0,
             "displayAfterWeeks": 0
         });
+
+        var current = datetimePicker.current;
+        current.addEventListeners("change", output);
+        output();
+        function output() {
+            document.getElementById("date").value = "Y/m/d H:i:s"
+                    .replace(/Y/g, current.year)
+                    .replace(/m/g, current.month + 1)
+                    .replace(/d/g, current.date)
+                    .replace(/H/g, current.hours)
+                    .replace(/i/g, current.minutes)
+                    .replace(/s/g, current.seconds)
+            ;
+        }
+
         console.log("Duration: " + (new Date() - startTime) + "ms");
     </script>
 </body>
