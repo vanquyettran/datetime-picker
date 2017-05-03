@@ -11,14 +11,25 @@
         }
         table {
             border-collapse: separate;
-            border-spacing: 1px;
-            background: #ccc;
+            border-spacing: 0;
+            /*background: #ccc;*/
+            border: 1px solid #ccc;
         }
         table td {
-            background: #fff;
-            padding: 0.5em;
+            /*background: #fff;*/
+            padding: 0 0.5em;
             cursor: default;
         }
+        table td.increase-cell,
+        table td.decrease-cell {
+            /*padding-top: 0;*/
+            /*padding-bottom: 0;*/
+            color: #aaa;
+            font-size: 0.9em;
+        }
+        table td.increase-cell,
+        table td.decrease-cell,
+        table td.jump2now-cell,
         table td.date-cell,
         table td.jump2today-cell,
         table td.next-year-cell,
@@ -27,6 +38,9 @@
         table td.previous-month-cell {
             cursor: pointer;
         }
+        table td.increase-cell:hover,
+        table td.decrease-cell:hover,
+        table td.jump2now-cell:hover,
         table td.date-cell:hover,
         table td.jump2today-cell:hover,
         table td.next-year-cell:hover,
@@ -35,41 +49,97 @@
         table td.previous-month-cell:hover {
             background: #eee;
         }
-        table .top-block,
-        table .bottom-block {
+        table {
             text-align: center;
         }
-        table .calendar-block {
+        table .date-block {
             text-align: right;
         }
-        table td.date-cell {
-            color: #aaa;
+        table .date-cell {
+            color: #ccc;
         }
-        table td.date-cell span {
-            display: block;
+        table span {
+            display: inline-block;
         }
-        table td.date-cell.current-month {
+        table .date-cell.current-month {
             color: #000;
         }
-        table td.date-cell.current-date {
+        table .date-cell.current-date {
             background: #ddd;
         }
-        table td.date-cell.today {
+        table .date-cell.today {
             color: #f40;
         }
-        table td.jump2today-cell span:before {
-            content: "Today";
+        table .jump2now-cell {
+            padding-top: 0.2em;
+            padding-bottom: 0.2em;
+            /*background: #f8f8f8;*/
         }
-        table td.year-cell span:before {
+        table .jump2now-cell span:before {
+            content: "Now";
+            color: #888;
+            /*font-size: 0.9em;*/
+        }
+        /*
+        table .increase-cell,
+        table .decrease-cell {
+            padding-top: 0.3em;
+            padding-bottom: 0.3em;
+        }
+        table .increase-cell span,
+        table .decrease-cell span {
+            display: block;
+            width: 100%;
+            height: 0.3em;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        table .increase-cell span {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600"><polygon points="500,0 1000,600 0,600" fill="%23ccc"></polygon></svg>');
+        }
+        table .decrease-cell span {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600"><polygon points="0,0 1000,0 500,600" fill="%23ccc"></polygon></svg>');
+        }*/
+        table .increase-cell span:before {
+            content: "+";
+        }
+        table .decrease-cell span:before {
+            content: "-";
+        }
+
+        table .weekday-cell {
+            color: #888;
+            background: #f8f8f8;
+        }
+        table .time-row td span:after {
+            color: #888;
+            font-size: 0.9em;
+        }
+        table .hours-cell span:after {
+            content: " hou";
+        }
+        table .minutes-cell span:after {
+            content: " min";
+        }
+        table .seconds-cell span:after {
+            content: " sec";
+        }
+        table .date-block tr:last-child td {
+            /*border-bottom: 1px solid #eee;*/
+        }
+        table .year-cell span {
+            letter-spacing: 0.32em;
+        }
+        table .year-cell span:before {
             content: "Year ";
+            font-size: 0.9em;
         }
-        table td.next-year-cell span:before,
-        table td.next-month-cell span:before {
-            content: ">";
+        table .month-cell span {
+            letter-spacing: 0.05em;
         }
-        table td.previous-year-cell span:before,
-        table td.previous-month-cell span:before {
-            content: "<";
+        table .date-cell {
+            padding-top: 0.1em;
+            padding-bottom: 0.1em;
         }
 
     </style>

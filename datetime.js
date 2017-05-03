@@ -225,7 +225,9 @@ var DatetimePicker = function (container, timestamp, options) {
                 [[10, 1], [1, 1]].forEach(function (change) {
                     actCell = document.createElement("td");
                     actCell.colSpan = change[1];
-                    actCell.className = act + "-" + change[0] + "-" + unit + "-cell";
+                    actCell.className = act + "-cell";
+                    actCell.setAttribute("data-change", change[0]);
+                    actCell.setAttribute("data-unit", unit);
                     actRow.appendChild(actCell);
                     actSpan = document.createElement("span");
                     actCell.appendChild(actSpan);
@@ -311,7 +313,9 @@ var DatetimePicker = function (container, timestamp, options) {
                 changes.forEach(function (change) {
                     actCell = document.createElement("td");
                     actCell.colSpan = change[1];
-                    actCell.className = act + "-" + change[0] + "-" + unit + "-cell";
+                    actCell.className = act + "-cell";
+                    actCell.setAttribute("data-change", change[0]);
+                    actCell.setAttribute("data-unit", unit);
                     actRow.appendChild(actCell);
                     actSpan = document.createElement("span");
                     actCell.appendChild(actSpan);
@@ -467,7 +471,7 @@ var DatetimePicker = function (container, timestamp, options) {
 
         var jump2nowCell = document.createElement("td");
         jump2nowCell.className = "jump2now-cell";
-        jump2nowCell.colSpan = 6;
+        jump2nowCell.colSpan = 7;
         jump2nowRow.appendChild(jump2nowCell);
         jump2nowCell.addEventListener("click", function () {
             var now = new Now();
@@ -522,16 +526,16 @@ var DatetimePicker = function (container, timestamp, options) {
         dateBlock.className = "date-block";
         container.appendChild(dateBlock);
 
-        var weekdaysRow = document.createElement("tr");
-        weekdaysRow.className = "weekdays-row";
-        dateBlock.appendChild(weekdaysRow);
+        var weekdayRow = document.createElement("tr");
+        weekdayRow.className = "weekday-row";
+        dateBlock.appendChild(weekdayRow);
 
         var weekdayCell;
         var weekdaySpan;
         for (var i = 0; i < 7; i++) {
             weekdayCell = document.createElement("td");
             weekdayCell.className = "weekday-cell";
-            weekdaysRow.appendChild(weekdayCell);
+            weekdayRow.appendChild(weekdayCell);
 
             weekdaySpan = document.createElement("span");
             weekdaySpan.innerHTML = weekdayNames[i];
@@ -610,7 +614,7 @@ var DatetimePicker = function (container, timestamp, options) {
                 }
             });
 
-            var datesRow;
+            var dateRow;
             var dateCell;
             var dateSpan;
             for (var j = 0; j < calendar.length; j++) {
@@ -627,11 +631,11 @@ var DatetimePicker = function (container, timestamp, options) {
                             break;
                         }
                     }
-                    datesRow = document.createElement("tr");
-                    datesRow.className = "dates-row";
-                    dateBlock.appendChild(datesRow);
+                    dateRow = document.createElement("tr");
+                    dateRow.className = "date-row";
+                    dateBlock.appendChild(dateRow);
                 }
-                if (datesRow) {
+                if (dateRow) {
                     dateCell = document.createElement("td");
                     dateCell.className = "date-cell";
 
@@ -659,20 +663,20 @@ var DatetimePicker = function (container, timestamp, options) {
                     }
 
                     // Binds data year/month/date/day to each item
-                    dateCell.setAttribute("data-year", String(item.year));
-                    dateCell.setAttribute("data-month", String(item.month));
-                    dateCell.setAttribute("data-date", String(item.date));
+                    dateCell.setAttribute("data-year", item.year);
+                    dateCell.setAttribute("data-month", item.month);
+                    dateCell.setAttribute("data-date", item.date);
 
                     dateSpan = document.createElement("span");
                     dateSpan.innerHTML = item.date;
 
                     dateCell.appendChild(dateSpan);
-                    datesRow.appendChild(dateCell);
+                    dateRow.appendChild(dateCell);
 
                     dateCell.addEventListener("click", function (event) {
-                        current.date = parseInt(this.getAttribute("data-date"));
-                        current.month = parseInt(this.getAttribute("data-month"));
-                        current.year = parseInt(this.getAttribute("data-year"));
+                        current.date = this.getAttribute("data-date");
+                        current.month = this.getAttribute("data-month");
+                        current.year = this.getAttribute("data-year");
                         // printCalendar();
                     });
                 }
