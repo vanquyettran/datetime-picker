@@ -36,8 +36,8 @@
       <file leaf-file-name="datetime.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/datetime.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="397">
-              <caret line="234" column="32" selection-start-line="234" selection-start-column="32" selection-end-line="234" selection-end-column="32" />
+            <state relative-caret-position="357">
+              <caret line="103" column="0" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
               <folding>
                 <element signature="e#0#39#0" expanded="false" />
               </folding>
@@ -242,7 +242,7 @@
       <workItem from="1493605937343" duration="20907000" />
       <workItem from="1493641646011" duration="17462000" />
       <workItem from="1493736652457" duration="17174000" />
-      <workItem from="1493774844213" duration="3337000" />
+      <workItem from="1493774844213" duration="6672000" />
     </task>
     <task id="LOCAL-00001" summary="date picker">
       <created>1493662572848</created>
@@ -269,10 +269,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="58880000" />
+    <option name="totallyTimeSpent" value="62215000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1376" height="754" extended-state="6" />
+    <frame x="-8" y="-8" width="1376" height="754" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2485294" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -482,8 +482,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/datetime.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="397">
-          <caret line="234" column="32" selection-start-line="234" selection-start-column="32" selection-end-line="234" selection-end-column="32" />
+        <state relative-caret-position="357">
+          <caret line="103" column="0" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
           <folding>
             <element signature="e#0#39#0" expanded="false" />
           </folding>
