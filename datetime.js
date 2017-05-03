@@ -9,10 +9,13 @@ var DatetimePicker = function (container, timestamp, options) {
     if (container.nodeName !== "TABLE") {
         throw Error("Wrapper must be table");
     }
-    this.container = container;
+    // this.container = container;
 
-    if (typeof options === "undefined") {
+    if (typeof options == "undefined") {
         options = {};
+    }
+    if (options instanceof Object == false) {
+        throw Error("Datetime picker options must be an object");
     }
 
     // if (typeof eventListeners === "undefined") {
@@ -170,7 +173,17 @@ var DatetimePicker = function (container, timestamp, options) {
     }
 
     this.widget = function (options) {
-        return this.calendar(options).clock(options).jump2now(options);
+        if (typeof options == "undefined") {
+            options = {};
+        }
+        if (options instanceof Object == false) {
+            throw Error("Widget options must be an object");
+        }
+        this.appendYearMonthBlock(options.yearMonthBlock);
+        this.appendDateBlock(options.dateBlock);
+        this.appendTimeBlock(options.timeBlock);
+        this.appendJump2nowBlock(options.jump2nowBlock);
+        return this;
     };
 
     // if (callback instanceof Function) {
@@ -179,7 +192,7 @@ var DatetimePicker = function (container, timestamp, options) {
     //     });
     // }
 
-    this.clock = function (options) {
+    this.appendTimeBlock = function (options) {
         // if (!table) {
         //     throw Error("Wrapper is required");
         // }
@@ -187,12 +200,19 @@ var DatetimePicker = function (container, timestamp, options) {
         //     throw Error("Wrapper must be table");
         // }
 
-        var table = this.container;
+        // var table = container;
+
+        if (typeof options == "undefined") {
+            options = {};
+        }
+        if (options instanceof Object == false) {
+            throw Error("Time block options must be an object");
+        }
 
         // Creates table for the calendar
         var timeBlock = document.createElement("tbody");
         timeBlock.className = "time-block";
-        table.appendChild(timeBlock);
+        container.appendChild(timeBlock);
 
         var actRow;
         var actCell;
@@ -202,17 +222,18 @@ var DatetimePicker = function (container, timestamp, options) {
             actRow.className = act + "-row";
             timeBlock.appendChild(actRow);
             ["hours", "minutes", "seconds"].forEach(function (unit) {
-                [10, 1].forEach(function (change) {
+                [[10, 1], [1, 1]].forEach(function (change) {
                     actCell = document.createElement("td");
-                    actCell.className = act + "-" + change + "-" + unit + "-cell";
+                    actCell.colSpan = change[1];
+                    actCell.className = act + "-" + change[0] + "-" + unit + "-cell";
                     actRow.appendChild(actCell);
                     actSpan = document.createElement("span");
                     actCell.appendChild(actSpan);
                     actCell.addEventListener("click", function (event) {
                         if (act == "increase") {
-                            current[unit] += change;
+                            current[unit] += change[0];
                         } else {
-                            current[unit] -= change;
+                            current[unit] -= change[0];
                         }
                     });
                 });
@@ -257,10 +278,171 @@ var DatetimePicker = function (container, timestamp, options) {
         printTime();
         current.addEventListeners("change", printTime);
 
-        return this;
+        // return this;
     };
 
-    this.jump2now = function (options) {
+    this.appendYearMonthBlock = function (options) {
+        if (typeof options == "undefined") {
+            options = {};
+        }
+        if (options instanceof Object == false) {
+            throw Error("Year-month block options must be an object");
+        }
+
+        var yearMonthBlock = document.createElement("tbody");
+        yearMonthBlock.className = "year-month-block";
+        container.appendChild(yearMonthBlock);
+
+        // Act row
+        var actRow;
+        var actCell;
+        var actSpan;
+        ["increase", "decrease"].forEach(function (act) {
+            actRow = document.createElement("tr");
+            actRow.className = act + "-row";
+            yearMonthBlock.appendChild(actRow);
+            ["year", "month"].forEach(function (unit) {
+                var changes;
+                if (unit == "year") {
+                    changes = [[1000, 1], [100, 1], [10, 1], [1, 1]];
+                } else {
+                    changes = [[1, 3]];
+                }
+                changes.forEach(function (change) {
+                    actCell = document.createElement("td");
+                    actCell.colSpan = change[1];
+                    actCell.className = act + "-" + change[0] + "-" + unit + "-cell";
+                    actRow.appendChild(actCell);
+                    actSpan = document.createElement("span");
+                    actCell.appendChild(actSpan);
+                    actCell.addEventListener("click", function (event) {
+                        if (act == "increase") {
+                            current[unit] += change[0];
+                        } else {
+                            current[unit] -= change[0];
+                        }
+                    });
+                });
+            });
+        });
+
+        // Year-month row
+        var yearMonthRow = document.createElement("tr");
+        yearMonthRow.className = "year-month-row";
+        yearMonthBlock.insertBefore(yearMonthRow, yearMonthBlock.children[1]);
+
+        var yearCell = document.createElement("td");
+        yearCell.className = "year-cell";
+        yearCell.colSpan = 4;
+        yearMonthRow.appendChild(yearCell);
+
+        var yearSpan = document.createElement("span");
+        yearCell.appendChild(yearSpan);
+
+        var monthCell = document.createElement("td");
+        monthCell.className = "month-cell";
+        monthCell.colSpan = 3;
+        yearMonthRow.appendChild(monthCell);
+
+        var monthSpan = document.createElement("span");
+        monthCell.appendChild(monthSpan);
+
+        // Year row
+        // var yearRow = document.createElement("tr");
+        // yearRow.className = "year-row";
+        // yearMonthBlock.appendChild(yearRow);
+        //
+        // var previousYearCell = document.createElement("td");
+        // previousYearCell.className = "previous-year-cell";
+        // yearRow.appendChild(previousYearCell);
+        // previousYearCell.addEventListener("click", function (event) {
+        //     if (current.year == 0) {
+        //         current.year = 11;
+        //         current.year--;
+        //     } else {
+        //         current.year--;
+        //     }
+        // });
+        //
+        // var previousYearSpan = document.createElement("span");
+        // previousYearCell.appendChild(previousYearSpan);
+        //
+        // var yearCell = document.createElement("td");
+        // yearCell.className = "year-cell";
+        // yearCell.colSpan = 5;
+        // yearRow.appendChild(yearCell);
+        //
+        // var yearSpan = document.createElement("span");
+        // yearCell.appendChild(yearSpan);
+        //
+        // var nextYearCell = document.createElement("td");
+        // nextYearCell.className = "next-year-cell";
+        // yearRow.appendChild(nextYearCell);
+        // nextYearCell.addEventListener("click", function (event) {
+        //     if (current.year == 11) {
+        //         current.year = 0;
+        //         current.year++;
+        //     } else {
+        //         current.year++;
+        //     }
+        // });
+        //
+        // var nextYearSpan = document.createElement("span");
+        // nextYearCell.appendChild(nextYearSpan);
+        //
+        // // Month row
+        // var monthRow = document.createElement("tr");
+        // monthRow.className = "month-row";
+        // yearMonthBlock.appendChild(monthRow);
+        //
+        // var previousMonthCell = document.createElement("td");
+        // previousMonthCell.className = "previous-month-cell";
+        // monthRow.appendChild(previousMonthCell);
+        // previousMonthCell.addEventListener("click", function (event) {
+        //     if (current.month == 0) {
+        //         current.month = 11;
+        //         current.year--;
+        //     } else {
+        //         current.month--;
+        //     }
+        // });
+        //
+        // var previousMonthSpan = document.createElement("span");
+        // previousMonthCell.appendChild(previousMonthSpan);
+        //
+        // var monthCell = document.createElement("td");
+        // monthCell.className = "month-cell";
+        // monthCell.colSpan = 5;
+        // monthRow.appendChild(monthCell);
+        //
+        // var monthSpan = document.createElement("span");
+        // monthCell.appendChild(monthSpan);
+        //
+        // var nextMonthCell = document.createElement("td");
+        // nextMonthCell.className = "next-month-cell";
+        // monthRow.appendChild(nextMonthCell);
+        // nextMonthCell.addEventListener("click", function (event) {
+        //     if (current.month == 11) {
+        //         current.month = 0;
+        //         current.year++;
+        //     } else {
+        //         current.month++;
+        //     }
+        // });
+        //
+        // var nextMonthSpan = document.createElement("span");
+        // nextMonthCell.appendChild(nextMonthSpan);
+
+        function printYearMonth() {
+            yearSpan.innerHTML = current.year;
+            monthSpan.innerHTML = monthNames[current.month];
+        }
+
+        printYearMonth();
+        current.addEventListeners("change", printYearMonth);
+    };
+
+    this.appendJump2nowBlock = function (options) {
         // if (!table) {
         //     throw Error("Wrapper is required");
         // }
@@ -268,11 +450,16 @@ var DatetimePicker = function (container, timestamp, options) {
         //     throw Error("Wrapper must be table");
         // }
 
-        var table = this.container;
+        if (typeof options == "undefined") {
+            options = {};
+        }
+        if (options instanceof Object == false) {
+            throw Error("Jump2now block options must be an object");
+        }
 
         var jump2nowBlock = document.createElement("tbody");
         jump2nowBlock.className = "jump2now-block";
-        table.appendChild(jump2nowBlock);
+        container.appendChild(jump2nowBlock);
 
         var jump2nowRow = document.createElement("tr");
         jump2nowRow.className = "jump2now-row";
@@ -294,10 +481,10 @@ var DatetimePicker = function (container, timestamp, options) {
         var jump2nowSpan = document.createElement("span");
         jump2nowCell.appendChild(jump2nowSpan);
 
-        return this;
+        // return this;
     };
 
-    this.calendar = function (options) {
+    this.appendDateBlock = function (options) {
         // if (!table) {
         //     throw Error("Wrapper is required");
         // }
@@ -305,11 +492,14 @@ var DatetimePicker = function (container, timestamp, options) {
         //     throw Error("Wrapper must be table");
         // }
 
-        var table = this.container;
+        // var table = container;
 
         // Normalize
-        if (!options) {
+        if (typeof options == "undefined") {
             options = {};
+        }
+        if (options instanceof Object == false) {
+            throw Error("Date block options must be an object");
         }
         options.displayBeforeWeeks = parseInt(options.displayBeforeWeeks) || 0;
         options.displayAfterWeeks = parseInt(options.displayAfterWeeks) || 0;
@@ -325,108 +515,12 @@ var DatetimePicker = function (container, timestamp, options) {
         // var table = document.createElement("table");
         // wrapper.appendChild(table);
 
-        var yearMonthBlock = document.createElement("tbody");
-        yearMonthBlock.className = "year-month-block";
-        table.appendChild(yearMonthBlock);
 
-        // Year row
-        var yearRow = document.createElement("tr");
-        yearRow.className = "year-row";
-        yearMonthBlock.appendChild(yearRow);
 
-        var previousYearCell = document.createElement("td");
-        previousYearCell.className = "previous-year-cell";
-        yearRow.appendChild(previousYearCell);
-        previousYearCell.addEventListener("click", function (event) {
-            if (current.year == 0) {
-                current.year = 11;
-                current.year--;
-            } else {
-                current.year--;
-            }
-        });
-
-        var previousYearSpan = document.createElement("span");
-        previousYearCell.appendChild(previousYearSpan);
-
-        var yearCell = document.createElement("td");
-        yearCell.className = "year-cell";
-        yearCell.colSpan = 5;
-        yearRow.appendChild(yearCell);
-
-        var yearSpan = document.createElement("span");
-        yearCell.appendChild(yearSpan);
-
-        var nextYearCell = document.createElement("td");
-        nextYearCell.className = "next-year-cell";
-        yearRow.appendChild(nextYearCell);
-        nextYearCell.addEventListener("click", function (event) {
-            if (current.year == 11) {
-                current.year = 0;
-                current.year++;
-            } else {
-                current.year++;
-            }
-        });
-        
-        var nextYearSpan = document.createElement("span");
-        nextYearCell.appendChild(nextYearSpan);
-
-        function printYear() {
-            yearSpan.innerHTML = current.year;
-        }
-
-        // Month row
-        var monthRow = document.createElement("tr");
-        monthRow.className = "month-row";
-        yearMonthBlock.appendChild(monthRow);
-
-        var previousMonthCell = document.createElement("td");
-        previousMonthCell.className = "previous-month-cell";
-        monthRow.appendChild(previousMonthCell);
-        previousMonthCell.addEventListener("click", function (event) {
-            if (current.month == 0) {
-                current.month = 11;
-                current.year--;
-            } else {
-                current.month--;
-            }
-        });
-
-        var previousMonthSpan = document.createElement("span");
-        previousMonthCell.appendChild(previousMonthSpan);
-
-        var monthCell = document.createElement("td");
-        monthCell.className = "month-cell";
-        monthCell.colSpan = 5;
-        monthRow.appendChild(monthCell);
-
-        var monthSpan = document.createElement("span");
-        monthCell.appendChild(monthSpan);
-
-        var nextMonthCell = document.createElement("td");
-        nextMonthCell.className = "next-month-cell";
-        monthRow.appendChild(nextMonthCell);
-        nextMonthCell.addEventListener("click", function (event) {
-            if (current.month == 11) {
-                current.month = 0;
-                current.year++;
-            } else {
-                current.month++;
-            }
-        });
-
-        var nextMonthSpan = document.createElement("span");
-        nextMonthCell.appendChild(nextMonthSpan);
-
-        function printMonth() {
-            monthSpan.innerHTML = monthNames[current.month];
-        }
-
-        // Calendar block
+        // Date block
         var dateBlock = document.createElement("tbody");
         dateBlock.className = "date-block";
-        table.appendChild(dateBlock);
+        container.appendChild(dateBlock);
 
         var weekdaysRow = document.createElement("tr");
         weekdaysRow.className = "weekdays-row";
@@ -608,16 +702,10 @@ var DatetimePicker = function (container, timestamp, options) {
         // var jump2todaySpan = document.createElement("span");
         // jump2todayCell.appendChild(jump2todaySpan);
 
-        function printCalendar() {
-            printYear();
-            printMonth();
-            printDate();
-        }
+        printDate();
+        current.addEventListeners("change", printDate);
 
-        printCalendar();
-        current.addEventListeners("change", printCalendar);
-
-        return this;
+        // return this;
     };
 
 };
