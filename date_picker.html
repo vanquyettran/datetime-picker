@@ -128,7 +128,7 @@
             /*border-bottom: 1px solid #eee;*/
         }
         table .year-cell span {
-            letter-spacing: 0.32em;
+            letter-spacing: 0.1em;
         }
         table .year-cell span:before {
             content: "Year ";
@@ -152,34 +152,34 @@
     <table class="datetime-picker" id="date_picker"></table>
     <script src="datetime.js"></script>
     <script>
-        var startTime = new Date()
+        var startTime = new Date();
 
-        var datetimePicker = new DatetimePicker(
+        new DatetimePicker(
             document.getElementById("date_picker"),
             "2017/5/20 21:10:20",
             {
-                "weekdays": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
+                "weekdays": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+                "onChange": function (current) {
+                    document.getElementById("date").value
+                        = "Y/m/d H:i:s"
+                        .replace(/Y/g, current.year)
+                        .replace(/m/g, current.month + 1)
+                        .replace(/d/g, current.date)
+                        .replace(/H/g, current.hours)
+                        .replace(/i/g, current.minutes)
+                        .replace(/s/g, current.seconds)
+                        ;
+                }
             }
         ).widget({
             "dateBlock": {
                 "displayBeforeWeeks": 0,
-                "displayAfterWeeks": 0
+                "displayAfterWeeks": 0,
+                "onClick": function (current) {
+                    console.log(current);
+                }
             }
         });
-
-        var current = datetimePicker.current;
-        current.addEventListeners("change", output);
-        output();
-        function output() {
-            document.getElementById("date").value = "Y/m/d H:i:s"
-                    .replace(/Y/g, current.year)
-                    .replace(/m/g, current.month + 1)
-                    .replace(/d/g, current.date)
-                    .replace(/H/g, current.hours)
-                    .replace(/i/g, current.minutes)
-                    .replace(/s/g, current.seconds)
-            ;
-        }
 
         console.log("Duration: " + (new Date() - startTime) + "ms");
     </script>

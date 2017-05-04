@@ -18,10 +18,6 @@ var DatetimePicker = function (container, timestamp, options) {
         throw Error("Datetime picker options must be an object");
     }
 
-    // if (typeof eventListeners === "undefined") {
-    //     eventListeners = {};
-    // }
-
     var weekdayNames;
     if (typeof options.weekdays !== "undefined"
         && options.weekdays instanceof Array
@@ -142,6 +138,12 @@ var DatetimePicker = function (container, timestamp, options) {
     current.minutes = initTime.getMinutes();
     current.seconds = initTime.getSeconds();
 
+    if (typeof options.onChange == "function") {
+        current.addEventListeners("change", function () {
+            options.onChange(current);
+        });
+    }
+
     function Now() {
         var now = new Date();
         Object.defineProperties(this, {
@@ -179,10 +181,10 @@ var DatetimePicker = function (container, timestamp, options) {
         if (options instanceof Object == false) {
             throw Error("Widget options must be an object");
         }
-        this.appendYearMonthBlock(options.yearMonthBlock);
-        this.appendDateBlock(options.dateBlock);
-        this.appendTimeBlock(options.timeBlock);
-        this.appendJump2nowBlock(options.jump2nowBlock);
+        container.appendChild(this.yearMonthBlock(options.yearMonthBlock));
+        container.appendChild(this.dateBlock(options.dateBlock));
+        container.appendChild(this.timeBlock(options.timeBlock));
+        container.appendChild(this.controlBlock(options.controlBlock))  ;
         return this;
     };
 
@@ -192,7 +194,7 @@ var DatetimePicker = function (container, timestamp, options) {
     //     });
     // }
 
-    this.appendTimeBlock = function (options) {
+    this.timeBlock = function (options) {
         // if (!table) {
         //     throw Error("Wrapper is required");
         // }
@@ -212,7 +214,7 @@ var DatetimePicker = function (container, timestamp, options) {
         // Creates table for the calendar
         var timeBlock = document.createElement("tbody");
         timeBlock.className = "time-block";
-        container.appendChild(timeBlock);
+        // container.appendChild(timeBlock);
 
         var actRow;
         var actCell;
@@ -280,10 +282,10 @@ var DatetimePicker = function (container, timestamp, options) {
         printTime();
         current.addEventListeners("change", printTime);
 
-        // return this;
+        return timeBlock;
     };
 
-    this.appendYearMonthBlock = function (options) {
+    this.yearMonthBlock = function (options) {
         if (typeof options == "undefined") {
             options = {};
         }
@@ -293,7 +295,7 @@ var DatetimePicker = function (container, timestamp, options) {
 
         var yearMonthBlock = document.createElement("tbody");
         yearMonthBlock.className = "year-month-block";
-        container.appendChild(yearMonthBlock);
+        // container.appendChild(yearMonthBlock);
 
         // Act row
         var actRow;
@@ -351,92 +353,6 @@ var DatetimePicker = function (container, timestamp, options) {
         var monthSpan = document.createElement("span");
         monthCell.appendChild(monthSpan);
 
-        // Year row
-        // var yearRow = document.createElement("tr");
-        // yearRow.className = "year-row";
-        // yearMonthBlock.appendChild(yearRow);
-        //
-        // var previousYearCell = document.createElement("td");
-        // previousYearCell.className = "previous-year-cell";
-        // yearRow.appendChild(previousYearCell);
-        // previousYearCell.addEventListener("click", function (event) {
-        //     if (current.year == 0) {
-        //         current.year = 11;
-        //         current.year--;
-        //     } else {
-        //         current.year--;
-        //     }
-        // });
-        //
-        // var previousYearSpan = document.createElement("span");
-        // previousYearCell.appendChild(previousYearSpan);
-        //
-        // var yearCell = document.createElement("td");
-        // yearCell.className = "year-cell";
-        // yearCell.colSpan = 5;
-        // yearRow.appendChild(yearCell);
-        //
-        // var yearSpan = document.createElement("span");
-        // yearCell.appendChild(yearSpan);
-        //
-        // var nextYearCell = document.createElement("td");
-        // nextYearCell.className = "next-year-cell";
-        // yearRow.appendChild(nextYearCell);
-        // nextYearCell.addEventListener("click", function (event) {
-        //     if (current.year == 11) {
-        //         current.year = 0;
-        //         current.year++;
-        //     } else {
-        //         current.year++;
-        //     }
-        // });
-        //
-        // var nextYearSpan = document.createElement("span");
-        // nextYearCell.appendChild(nextYearSpan);
-        //
-        // // Month row
-        // var monthRow = document.createElement("tr");
-        // monthRow.className = "month-row";
-        // yearMonthBlock.appendChild(monthRow);
-        //
-        // var previousMonthCell = document.createElement("td");
-        // previousMonthCell.className = "previous-month-cell";
-        // monthRow.appendChild(previousMonthCell);
-        // previousMonthCell.addEventListener("click", function (event) {
-        //     if (current.month == 0) {
-        //         current.month = 11;
-        //         current.year--;
-        //     } else {
-        //         current.month--;
-        //     }
-        // });
-        //
-        // var previousMonthSpan = document.createElement("span");
-        // previousMonthCell.appendChild(previousMonthSpan);
-        //
-        // var monthCell = document.createElement("td");
-        // monthCell.className = "month-cell";
-        // monthCell.colSpan = 5;
-        // monthRow.appendChild(monthCell);
-        //
-        // var monthSpan = document.createElement("span");
-        // monthCell.appendChild(monthSpan);
-        //
-        // var nextMonthCell = document.createElement("td");
-        // nextMonthCell.className = "next-month-cell";
-        // monthRow.appendChild(nextMonthCell);
-        // nextMonthCell.addEventListener("click", function (event) {
-        //     if (current.month == 11) {
-        //         current.month = 0;
-        //         current.year++;
-        //     } else {
-        //         current.month++;
-        //     }
-        // });
-        //
-        // var nextMonthSpan = document.createElement("span");
-        // nextMonthCell.appendChild(nextMonthSpan);
-
         function printYearMonth() {
             yearSpan.innerHTML = current.year;
             monthSpan.innerHTML = monthNames[current.month];
@@ -444,9 +360,11 @@ var DatetimePicker = function (container, timestamp, options) {
 
         printYearMonth();
         current.addEventListeners("change", printYearMonth);
+
+        return yearMonthBlock;
     };
 
-    this.appendJump2nowBlock = function (options) {
+    this.controlBlock = function (options) {
         // if (!table) {
         //     throw Error("Wrapper is required");
         // }
@@ -458,16 +376,16 @@ var DatetimePicker = function (container, timestamp, options) {
             options = {};
         }
         if (options instanceof Object == false) {
-            throw Error("Jump2now block options must be an object");
+            throw Error("Control block options must be an object");
         }
 
-        var jump2nowBlock = document.createElement("tbody");
-        jump2nowBlock.className = "jump2now-block";
-        container.appendChild(jump2nowBlock);
+        var controlBlock = document.createElement("tbody");
+        controlBlock.className = "control-block";
+        // container.appendChild(controlBlock);
 
         var jump2nowRow = document.createElement("tr");
         jump2nowRow.className = "jump2now-row";
-        jump2nowBlock.appendChild(jump2nowRow);
+        controlBlock.appendChild(jump2nowRow);
 
         var jump2nowCell = document.createElement("td");
         jump2nowCell.className = "jump2now-cell";
@@ -485,10 +403,10 @@ var DatetimePicker = function (container, timestamp, options) {
         var jump2nowSpan = document.createElement("span");
         jump2nowCell.appendChild(jump2nowSpan);
 
-        // return this;
+        return controlBlock;
     };
 
-    this.appendDateBlock = function (options) {
+    this.dateBlock = function (options, eventListeners) {
         // if (!table) {
         //     throw Error("Wrapper is required");
         // }
@@ -501,8 +419,7 @@ var DatetimePicker = function (container, timestamp, options) {
         // Normalize
         if (typeof options == "undefined") {
             options = {};
-        }
-        if (options instanceof Object == false) {
+        } else if (options instanceof Object == false) {
             throw Error("Date block options must be an object");
         }
         options.displayBeforeWeeks = parseInt(options.displayBeforeWeeks) || 0;
@@ -524,7 +441,7 @@ var DatetimePicker = function (container, timestamp, options) {
         // Date block
         var dateBlock = document.createElement("tbody");
         dateBlock.className = "date-block";
-        container.appendChild(dateBlock);
+        // container.appendChild(dateBlock);
 
         var weekdayRow = document.createElement("tr");
         weekdayRow.className = "weekday-row";
@@ -678,6 +595,10 @@ var DatetimePicker = function (container, timestamp, options) {
                         current.month = this.getAttribute("data-month");
                         current.year = this.getAttribute("data-year");
                         // printCalendar();
+
+                        if (typeof options.onClick == "function") {
+                            options.onClick(current);
+                        }
                     });
                 }
             }
@@ -709,7 +630,7 @@ var DatetimePicker = function (container, timestamp, options) {
         printDate();
         current.addEventListeners("change", printDate);
 
-        // return this;
+        return dateBlock;
     };
 
 };
