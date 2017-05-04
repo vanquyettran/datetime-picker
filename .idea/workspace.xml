@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ba622272-274b-4520-a825-d2389f3e6324" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/date_picker.html" afterPath="$PROJECT_DIR$/date_picker.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datetime.js" afterPath="$PROJECT_DIR$/datetime.js" />
     </list>
     <ignored path="datetime_picker.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,10 +27,10 @@
         <entry file="file://$PROJECT_DIR$/date_picker.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="364">
-              <caret line="14" column="30" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
+              <caret line="70" column="37" selection-start-line="70" selection-start-column="37" selection-end-line="70" selection-end-column="37" />
               <folding>
-                <element signature="e#2782#3176#2" expanded="true" />
-                <element signature="e#3261#3654#2" expanded="true" />
+                <element signature="e#2817#3211#2" expanded="true" />
+                <element signature="e#3296#3689#2" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -248,7 +246,7 @@
       <workItem from="1493736652457" duration="17221000" />
       <workItem from="1493829828510" duration="8964000" />
       <workItem from="1493860878568" duration="8947000" />
-      <workItem from="1493915039880" duration="7980000" />
+      <workItem from="1493915039880" duration="8246000" />
     </task>
     <task id="LOCAL-00001" summary="date picker">
       <created>1493662572848</created>
@@ -268,7 +266,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="81481000" />
+    <option name="totallyTimeSpent" value="81747000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-10" y="0" width="1934" height="1044" extended-state="0" />
@@ -318,8 +316,8 @@
         <state relative-caret-position="3380">
           <caret line="130" column="31" selection-start-line="130" selection-start-column="31" selection-end-line="130" selection-end-column="31" />
           <folding>
-            <element signature="e#2782#3176#2" expanded="true" />
-            <element signature="e#3261#3654#2" expanded="true" />
+            <element signature="e#2817#3211#2" expanded="true" />
+            <element signature="e#3296#3689#2" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -371,8 +369,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#2782#3176#2" expanded="true" />
-            <element signature="e#3261#3654#2" expanded="true" />
+            <element signature="e#2817#3211#2" expanded="true" />
+            <element signature="e#3296#3689#2" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -424,8 +422,8 @@
         <state relative-caret-position="2470">
           <caret line="95" column="10" selection-start-line="95" selection-start-column="10" selection-end-line="95" selection-end-column="10" />
           <folding>
-            <element signature="e#2782#3176#2" expanded="true" />
-            <element signature="e#3261#3654#2" expanded="true" />
+            <element signature="e#2817#3211#2" expanded="true" />
+            <element signature="e#3296#3689#2" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -477,8 +475,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#2782#3176#2" expanded="true" />
-            <element signature="e#3261#3654#2" expanded="true" />
+            <element signature="e#2817#3211#2" expanded="true" />
+            <element signature="e#3296#3689#2" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -522,8 +520,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#2782#3176#2" expanded="true" />
-            <element signature="e#3261#3654#2" expanded="true" />
+            <element signature="e#2817#3211#2" expanded="true" />
+            <element signature="e#3296#3689#2" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -599,10 +597,10 @@
     <entry file="file://$PROJECT_DIR$/date_picker.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="364">
-          <caret line="14" column="30" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
+          <caret line="70" column="37" selection-start-line="70" selection-start-column="37" selection-end-line="70" selection-end-column="37" />
           <folding>
-            <element signature="e#2782#3176#2" expanded="true" />
-            <element signature="e#3261#3654#2" expanded="true" />
+            <element signature="e#2817#3211#2" expanded="true" />
+            <element signature="e#3296#3689#2" expanded="true" />
           </folding>
         </state>
       </provider>
