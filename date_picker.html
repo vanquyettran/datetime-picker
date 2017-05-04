@@ -20,15 +20,6 @@
             padding: 0 0.5em;
             cursor: default;
         }
-        table td.increase-cell,
-        table td.decrease-cell {
-            /*padding-top: 0;*/
-            /*padding-bottom: 0;*/
-            color: #aaa;
-            font-size: 0.9em;
-        }
-        table td.increase-cell,
-        table td.decrease-cell,
         table td.jump2now-cell,
         table td.date-cell,
         table td.jump2today-cell,
@@ -38,8 +29,6 @@
         table td.previous-month-cell {
             cursor: pointer;
         }
-        table td.increase-cell:hover,
-        table td.decrease-cell:hover,
         table td.jump2now-cell:hover,
         table td.date-cell:hover,
         table td.jump2today-cell:hover,
@@ -55,19 +44,19 @@
         table .date-block {
             text-align: right;
         }
-        table .date-cell {
+        table td.date-cell {
             color: #ccc;
         }
         table span {
             display: inline-block;
         }
-        table .date-cell.current-month {
+        table td.date-cell.current-month {
             color: #000;
         }
-        table .date-cell.current-date {
+        table td.date-cell.current-date {
             background: #ddd;
         }
-        table .date-cell.today {
+        table td.date-cell.today {
             color: #f40;
         }
         table .jump2now-cell {
@@ -76,35 +65,42 @@
             /*background: #f8f8f8;*/
         }
         table .jump2now-cell span:before {
-            content: "Now";
+            content: "Bây giờ";
             color: #888;
             /*font-size: 0.9em;*/
         }
-        /*
-        table .increase-cell,
-        table .decrease-cell {
-            padding-top: 0.3em;
-            padding-bottom: 0.3em;
-        }
         table .increase-cell span,
         table .decrease-cell span {
+            width: 1em;
+            height: 1em;
+            line-height: 1em;
+            vertical-align: middle;
+            text-align: center;
+        }
+        table .increase-cell span:hover,
+        table .decrease-cell span:hover {
+            background: #eee;
+        }
+        table .increase-cell span:before,
+        table .decrease-cell span:before {
+            color: #aaa;
+            font-size: 0.8em;
+        }
+        table .increase-cell span:before,
+        table .decrease-cell span:before {
+            content: "";
             display: block;
             width: 100%;
-            height: 0.3em;
-            background-repeat: no-repeat;
+            height: 100%;
             background-position: center;
+            background-repeat: no-repeat;
+            background-size: 50%;
         }
-        table .increase-cell span {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600"><polygon points="500,0 1000,600 0,600" fill="%23ccc"></polygon></svg>');
-        }
-        table .decrease-cell span {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600"><polygon points="0,0 1000,0 500,600" fill="%23ccc"></polygon></svg>');
-        }*/
         table .increase-cell span:before {
-            content: "+";
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http:%2F%2Fwww.w3.org%2F2000%2Fsvg" width="452" height="452" viewBox="0 0 451.8 451.8"><path fill="%2368b" d="M248.3 106.4l194.3 194.3c12.4 12.4 12.4 32.4 0 44.7 -12.4 12.4-32.4 12.4-44.7 0L225.9 173.5 54 345.4c-12.4 12.4-32.4 12.4-44.7 0 -12.4-12.4-12.4-32.4 0-44.7L203.6 106.4c6.2-6.2 14.3-9.3 22.4-9.3C234 97.1 242.1 100.2 248.3 106.4z"%2F><%2Fsvg>');
         }
         table .decrease-cell span:before {
-            content: "-";
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http:%2F%2Fwww.w3.org%2F2000%2Fsvg" width="452" height="452" viewBox="0 0 451.8 451.8"><path fill="%23b86" d="M225.9 354.7c-8.1 0-16.2-3.1-22.4-9.3L9.3 151.2c-12.4-12.4-12.4-32.4 0-44.8 12.4-12.4 32.4-12.4 44.7 0l171.9 171.9 171.9-171.9c12.4-12.4 32.4-12.4 44.7 0 12.4 12.4 12.4 32.4 0 44.8L248.3 345.4C242.1 351.6 234 354.7 225.9 354.7z"%2F><%2Fsvg>');
         }
 
         table .weekday-cell {
@@ -116,31 +112,39 @@
             font-size: 0.9em;
         }
         table .hours-cell span:after {
-            content: " hou";
+            content: " giờ";
         }
         table .minutes-cell span:after {
-            content: " min";
+            content: " phút";
         }
         table .seconds-cell span:after {
-            content: " sec";
+            content: " giây";
         }
         table .date-block tr:last-child td {
             /*border-bottom: 1px solid #eee;*/
         }
         table .year-cell span {
-            letter-spacing: 0.1em;
+            /*letter-spacing: 0.1em;*/
         }
         table .year-cell span:before {
-            content: "Year ";
+            content: "Năm ";
             font-size: 0.9em;
         }
-        table .month-cell span {
-            letter-spacing: 0.05em;
+        table .month-cell {
+        }
+        table .month-cell span:before {
+            content: "Tháng ";
+            font-size: 0.9em;
         }
         table .date-cell {
             padding-top: 0.1em;
             padding-bottom: 0.1em;
         }
+        table .increase-cell,
+        table .decrease-cell {
+            /*letter-spacing: 0.5em;*/
+        }
+
 
     </style>
 </head>
@@ -158,7 +162,29 @@
             document.getElementById("date_picker"),
             "2017/5/20 21:10:20",
             {
-                "weekdays": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+                "weekdays": [
+                    "CN",
+                    "T2",
+                    "T3",
+                    "T4",
+                    "T5",
+                    "T6",
+                    "T7"
+                ],
+                "months": [
+                    "Giêng",
+                    "Hai",
+                    "Ba",
+                    "Tư",
+                    "Năm",
+                    "Sáu",
+                    "Bảy",
+                    "Tám",
+                    "Chín",
+                    "Mười",
+                    "Mười Một",
+                    "Mười Hai"
+                ],
                 "onChange": function (current) {
                     document.getElementById("date").value
                         = "Y/m/d H:i:s"
@@ -173,8 +199,7 @@
             }
         ).widget({
             "dateBlock": {
-                "displayBeforeWeeks": 0,
-                "displayAfterWeeks": 0,
+//                "extendedWeeks": {"before": 1, "after": 1},
                 "onClick": function (current) {
                     console.log(current);
                 }

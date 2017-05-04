@@ -37,8 +37,7 @@ var DatetimePicker = function (container, timestamp, options) {
     }
 
     var monthNames;
-    if (typeof options.months !== "undefined"
-        && options.months instanceof Array
+    if (options.months instanceof Array
         && options.months.length == 12
     ) {
         monthNames = options.months;
@@ -224,20 +223,20 @@ var DatetimePicker = function (container, timestamp, options) {
             actRow.className = act + "-row";
             timeBlock.appendChild(actRow);
             ["hours", "minutes", "seconds"].forEach(function (unit) {
-                [[10, 1], [1, 1]].forEach(function (change) {
-                    actCell = document.createElement("td");
-                    actCell.colSpan = change[1];
-                    actCell.className = act + "-cell";
-                    actCell.setAttribute("data-change", change[0]);
-                    actCell.setAttribute("data-unit", unit);
-                    actRow.appendChild(actCell);
+                actCell = document.createElement("td");
+                actCell.colSpan = 2;
+                actCell.className = act + "-cell";
+                actRow.appendChild(actCell);
+                [10, 1].forEach(function (change) {
                     actSpan = document.createElement("span");
                     actCell.appendChild(actSpan);
+                    actSpan.setAttribute("data-change", change);
+                    actSpan.setAttribute("data-unit", unit);
                     actCell.addEventListener("click", function (event) {
                         if (act == "increase") {
-                            current[unit] += change[0];
+                            current[unit] += change;
                         } else {
-                            current[unit] -= change[0];
+                            current[unit] -= change;
                         }
                     });
                 });
@@ -301,31 +300,32 @@ var DatetimePicker = function (container, timestamp, options) {
         var actRow;
         var actCell;
         var actSpan;
+        var changes;
         ["increase", "decrease"].forEach(function (act) {
             actRow = document.createElement("tr");
             actRow.className = act + "-row";
             yearMonthBlock.appendChild(actRow);
             ["year", "month"].forEach(function (unit) {
-                var changes;
+                actCell = document.createElement("td");
                 if (unit == "year") {
-                    changes = [[1000, 1], [100, 1], [10, 1], [1, 1]];
+                    changes = [100, 10, 1];
+                    actCell.colSpan = 3;
                 } else {
-                    changes = [[1, 3]];
+                    changes = [1];
+                    actCell.colSpan = 4;
                 }
+                actCell.className = act + "-cell";
+                actRow.appendChild(actCell);
                 changes.forEach(function (change) {
-                    actCell = document.createElement("td");
-                    actCell.colSpan = change[1];
-                    actCell.className = act + "-cell";
-                    actCell.setAttribute("data-change", change[0]);
-                    actCell.setAttribute("data-unit", unit);
-                    actRow.appendChild(actCell);
                     actSpan = document.createElement("span");
                     actCell.appendChild(actSpan);
-                    actCell.addEventListener("click", function (event) {
+                    actSpan.setAttribute("data-change", change);
+                    actSpan.setAttribute("data-unit", unit);
+                    actSpan.addEventListener("click", function (event) {
                         if (act == "increase") {
-                            current[unit] += change[0];
+                            current[unit] += change;
                         } else {
-                            current[unit] -= change[0];
+                            current[unit] -= change;
                         }
                     });
                 });
@@ -339,7 +339,7 @@ var DatetimePicker = function (container, timestamp, options) {
 
         var yearCell = document.createElement("td");
         yearCell.className = "year-cell";
-        yearCell.colSpan = 4;
+        yearCell.colSpan = 3;
         yearMonthRow.appendChild(yearCell);
 
         var yearSpan = document.createElement("span");
@@ -347,7 +347,7 @@ var DatetimePicker = function (container, timestamp, options) {
 
         var monthCell = document.createElement("td");
         monthCell.className = "month-cell";
-        monthCell.colSpan = 3;
+        monthCell.colSpan = 4;
         yearMonthRow.appendChild(monthCell);
 
         var monthSpan = document.createElement("span");
@@ -422,20 +422,33 @@ var DatetimePicker = function (container, timestamp, options) {
         } else if (options instanceof Object == false) {
             throw Error("Date block options must be an object");
         }
-        options.displayBeforeWeeks = parseInt(options.displayBeforeWeeks) || 0;
-        options.displayAfterWeeks = parseInt(options.displayAfterWeeks) || 0;
-        if (options.displayBeforeWeeks > 3
-            || options.displayBeforeWeeks < 0
-            || options.displayAfterWeeks > 3
-            || options.displayAfterWeeks < 0
-        ) {
-            throw Error("Option display before/after weeks must be in range [0, 3]");
+
+        // options.displayBeforeWeeks = parseInt(options.displayBeforeWeeks) || 0;
+        // options.displayAfterWeeks = parseInt(options.displayAfterWeeks) || 0;
+        // if (options.displayBeforeWeeks > 3
+        //     || options.displayBeforeWeeks < 0
+        //     || options.displayAfterWeeks > 3
+        //     || options.displayAfterWeeks < 0
+        // ) {
+        //     throw Error("Option display before/after weeks must be in range [0, 3]");
+        // }
+
+        if (typeof options.extendedWeeks == "undefined") {
+            options.extendedWeeks = {"before": 0, "after": 0};
+        } else if (typeof options.extendedWeeks != "object") {
+            throw TypeError("Date block: Options.extendedWeeks must be object");
+        } else {
+            options.extendedWeeks.before = parseInt(options.extendedWeeks.before) || 0;
+            options.extendedWeeks.after = parseInt(options.extendedWeeks.after) || 0;
         }
 
-        // Creates table for the calendar
-        // var table = document.createElement("table");
-        // wrapper.appendChild(table);
-
+        if (options.extendedWeeks.before > 3
+            || options.extendedWeeks.before < 0
+            || options.extendedWeeks.after > 3
+            || options.extendedWeeks.after < 0
+        ) {
+            throw Error("Date block: Options.extendedWeeks.before/after must be in range [0, 3]");
+        }
 
 
         // Date block
@@ -538,13 +551,13 @@ var DatetimePicker = function (container, timestamp, options) {
                 var item = calendar[j];
                 if (item.day == 0) { // Monday
                     if (item.monthPos == -1) {
-                        if (calendar[(j + 6) + 7 * options.displayBeforeWeeks].monthPos == -1) {
+                        if (calendar[(j + 6) + 7 * options.extendedWeeks.before].monthPos == -1) {
                             j += 6;
                             continue;
                         }
                     }
                     if (item.monthPos == 1) {
-                        if (calendar[j - 7 * options.displayAfterWeeks].monthPos == 1) {
+                        if (calendar[j - 7 * options.extendedWeeks.after].monthPos == 1) {
                             break;
                         }
                     }
@@ -603,29 +616,6 @@ var DatetimePicker = function (container, timestamp, options) {
                 }
             }
         }
-
-        // Jump to today
-        // var bottomBlock = document.createElement("tfoot");
-        // bottomBlock.className = "bottom-block";
-        // table.appendChild(bottomBlock);
-        //
-        // var jump2todayRow = document.createElement("tr");
-        // jump2todayRow.className = "jump2today-row";
-        // bottomBlock.appendChild(jump2todayRow);
-        //
-        // var jump2todayCell = document.createElement("td");
-        // jump2todayCell.className = "jump2today-cell";
-        // jump2todayCell.colSpan = 7;
-        // jump2todayRow.appendChild(jump2todayCell);
-        // jump2todayCell.addEventListener("click", function () {
-        //     var now = new Now();
-        //     current.date = now.date;
-        //     current.month = now.month;
-        //     current.year = now.year;
-        // });
-        //
-        // var jump2todaySpan = document.createElement("span");
-        // jump2todayCell.appendChild(jump2todaySpan);
 
         printDate();
         current.addEventListeners("change", printDate);
