@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>Date picker</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
         html {
             font-family: Arial, sans-serif;
             font-size: 14px;
@@ -17,25 +20,28 @@
         }
         table td {
             /*background: #fff;*/
-            padding: 0 0.5em;
+            /*padding: 0 0.5em;*/
             cursor: default;
+            border: none;
+            padding: 0;
         }
-        table td.jump2now-cell,
-        table td.date-cell,
-        table td.jump2today-cell,
-        table td.next-year-cell,
-        table td.previous-year-cell,
-        table td.next-month-cell,
-        table td.previous-month-cell {
+        table td.jump2now-cell span,
+        table td.date-cell span,
+        table td.jump2today-cell span,
+        table td.next-year-cell span,
+        table td.previous-year-cell span,
+        table td.next-month-cell span,
+        table td.previous-month-cell span {
             cursor: pointer;
+            display: inline-block;
         }
-        table td.jump2now-cell:hover,
-        table td.date-cell:hover,
-        table td.jump2today-cell:hover,
-        table td.next-year-cell:hover,
-        table td.previous-year-cell:hover,
-        table td.next-month-cell:hover,
-        table td.previous-month-cell:hover {
+        table td.jump2now-cell span:hover,
+        table td.date-cell span:hover,
+        table td.jump2today-cell span:hover,
+        table td.next-year-cell span:hover,
+        table td.previous-year-cell span:hover,
+        table td.next-month-cell span:hover,
+        table td.previous-month-cell span:hover {
             background: #eee;
         }
         table {
@@ -53,15 +59,15 @@
         table td.date-cell.current-month {
             color: #000;
         }
-        table td.date-cell.current-date {
+        table td.date-cell.current-date span {
             background: #ddd;
         }
         table td.date-cell.today {
             color: #f40;
         }
-        table .jump2now-cell {
-            padding-top: 0.2em;
-            padding-bottom: 0.2em;
+        table .jump2now-cell span {
+            /*padding-top: 0.2em;*/
+            /*padding-bottom: 0.2em;*/
             /*background: #f8f8f8;*/
         }
         table .jump2now-cell span:before {
@@ -74,9 +80,15 @@
         table .decrease-cell span {
             width: 1em;
             height: 1em;
-            line-height: 1em;
-            vertical-align: middle;
-            text-align: center;
+            /*line-height: 1em;*/
+            /*vertical-align: baseline;*/
+            /*text-align: center;*/
+        }
+        table .increase-cell span {
+            vertical-align: bottom;
+        }
+        table .decrease-cell span {
+            vertical-align: top;
         }
         table .increase-cell span:hover,
         table .decrease-cell span:hover {
@@ -138,15 +150,22 @@
             font-size: 0.9em;
         }
         table .date-cell {
-            padding-top: 0.1em;
-            padding-bottom: 0.1em;
+            /*padding-top: 0.1em;*/
+            /*padding-bottom: 0.1em;*/
         }
         table .increase-cell,
         table .decrease-cell {
             /*letter-spacing: 0.5em;*/
         }
-
-
+        table .jump2now-cell span,
+        table .date-cell span {
+            padding: 0.1em 0.5em;
+        }
+        table .date-cell span {
+            display: block;
+            width: 100%;
+        }
+        table .control-block {display: none}
     </style>
 </head>
 <body>

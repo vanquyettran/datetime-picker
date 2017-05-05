@@ -232,7 +232,7 @@ var DatetimePicker = function (container, timestamp, options) {
                     actCell.appendChild(actSpan);
                     actSpan.setAttribute("data-change", change);
                     actSpan.setAttribute("data-unit", unit);
-                    actCell.addEventListener("click", function (event) {
+                    actSpan.addEventListener("click", function (event) {
                         if (act == "increase") {
                             current[unit] += change;
                         } else {
@@ -388,10 +388,14 @@ var DatetimePicker = function (container, timestamp, options) {
         controlBlock.appendChild(jump2nowRow);
 
         var jump2nowCell = document.createElement("td");
+        jump2nowRow.appendChild(jump2nowCell);
         jump2nowCell.className = "jump2now-cell";
         jump2nowCell.colSpan = 7;
-        jump2nowRow.appendChild(jump2nowCell);
-        jump2nowCell.addEventListener("click", function () {
+
+        var jump2nowSpan = document.createElement("span");
+        jump2nowCell.appendChild(jump2nowSpan);
+
+        jump2nowSpan.addEventListener("click", function () {
             var now = new Now();
             current.year = now.year;
             current.month = now.month;
@@ -400,38 +404,17 @@ var DatetimePicker = function (container, timestamp, options) {
             current.minutes = now.minutes;
             current.seconds = now.seconds;
         });
-        var jump2nowSpan = document.createElement("span");
-        jump2nowCell.appendChild(jump2nowSpan);
 
         return controlBlock;
     };
 
-    this.dateBlock = function (options, eventListeners) {
-        // if (!table) {
-        //     throw Error("Wrapper is required");
-        // }
-        // if (table.nodeName.toLowerCase() !== "table") {
-        //     throw Error("Wrapper must be table");
-        // }
-
-        // var table = container;
-
+    this.dateBlock = function (options) {
         // Normalize
         if (typeof options == "undefined") {
             options = {};
         } else if (options instanceof Object == false) {
             throw Error("Date block options must be an object");
         }
-
-        // options.displayBeforeWeeks = parseInt(options.displayBeforeWeeks) || 0;
-        // options.displayAfterWeeks = parseInt(options.displayAfterWeeks) || 0;
-        // if (options.displayBeforeWeeks > 3
-        //     || options.displayBeforeWeeks < 0
-        //     || options.displayAfterWeeks > 3
-        //     || options.displayAfterWeeks < 0
-        // ) {
-        //     throw Error("Option display before/after weeks must be in range [0, 3]");
-        // }
 
         if (typeof options.extendedWeeks == "undefined") {
             options.extendedWeeks = {"before": 0, "after": 0};
@@ -567,6 +550,7 @@ var DatetimePicker = function (container, timestamp, options) {
                 }
                 if (dateRow) {
                     dateCell = document.createElement("td");
+                    dateRow.appendChild(dateCell);
                     dateCell.className = "date-cell";
 
                     // Marks item is today
@@ -592,18 +576,16 @@ var DatetimePicker = function (container, timestamp, options) {
                         dateCell.classList.add("current-date");
                     }
 
-                    // Binds data year/month/date/day to each item
-                    dateCell.setAttribute("data-year", item.year);
-                    dateCell.setAttribute("data-month", item.month);
-                    dateCell.setAttribute("data-date", item.date);
-
                     dateSpan = document.createElement("span");
-                    dateSpan.innerHTML = item.date;
-
                     dateCell.appendChild(dateSpan);
-                    dateRow.appendChild(dateCell);
 
-                    dateCell.addEventListener("click", function (event) {
+                    // Binds data year/month/date/day to each item
+                    dateSpan.setAttribute("data-year", item.year);
+                    dateSpan.setAttribute("data-month", item.month);
+                    dateSpan.setAttribute("data-date", item.date);
+
+                    dateSpan.innerHTML = item.date;
+                    dateSpan.addEventListener("click", function (event) {
                         current.date = this.getAttribute("data-date");
                         current.month = this.getAttribute("data-month");
                         current.year = this.getAttribute("data-year");
