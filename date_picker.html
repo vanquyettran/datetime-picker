@@ -51,13 +51,15 @@
             text-align: right;
         }
         table td.date-cell {
-            color: #ccc;
+            /*color: #ccc;*/
+            opacity: 0.3;
         }
         table span {
             display: inline-block;
         }
         table td.date-cell.current-month {
-            color: #000;
+            /*color: #000;*/
+            opacity: 1;
         }
         table td.date-cell.current-date span {
             background: #ddd;
@@ -69,17 +71,18 @@
             /*padding-top: 0.2em;*/
             /*padding-bottom: 0.2em;*/
             /*background: #f8f8f8;*/
+            /*border-top: 1px solid #eee;*/
         }
         table .jump2now-cell span:before {
             content: "Bây giờ";
-            color: #888;
+            color: #aaa;
             font-size: 0.8em;
             text-transform: uppercase;
         }
         table .increase-cell span,
         table .decrease-cell span {
-            width: 1em;
-            height: 1em;
+            width: 1.5em;
+            height: 1.2em;
             /*line-height: 1em;*/
             /*vertical-align: baseline;*/
             /*text-align: center;*/
@@ -107,7 +110,7 @@
             height: 100%;
             background-position: center;
             background-repeat: no-repeat;
-            background-size: 50%;
+            background-size: 30%;
         }
         table .increase-cell span:before {
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http:%2F%2Fwww.w3.org%2F2000%2Fsvg" width="452" height="452" viewBox="0 0 451.8 451.8"><path fill="%2368b" d="M248.3 106.4l194.3 194.3c12.4 12.4 12.4 32.4 0 44.7 -12.4 12.4-32.4 12.4-44.7 0L225.9 173.5 54 345.4c-12.4 12.4-32.4 12.4-44.7 0 -12.4-12.4-12.4-32.4 0-44.7L203.6 106.4c6.2-6.2 14.3-9.3 22.4-9.3C234 97.1 242.1 100.2 248.3 106.4z"%2F><%2Fsvg>');
@@ -121,7 +124,7 @@
             background: #f8f8f8;
         }
         table .time-row td span:after {
-            color: #888;
+            color: #666;
             font-size: 0.9em;
         }
         table .hours-cell span:after {
@@ -157,15 +160,16 @@
         table .decrease-cell {
             /*letter-spacing: 0.5em;*/
         }
+        table .weekday-cell span,
         table .jump2now-cell span,
         table .date-cell span {
             padding: 0.1em 0.5em;
-        }
-        table .date-cell span {
+        /*}*/
+        /*table .date-cell span {*/
             display: block;
             width: 100%;
         }
-        table .control-block {display: none}
+        /*table .control-block {display: none}*/
     </style>
 </head>
 <body>
