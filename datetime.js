@@ -478,48 +478,48 @@ DatetimePicker.prototype.dateBlock = function (options) {
         // Calendar data
         var calendar = [];
 
-        var year_months = [{
+        var threeMonths = [{
             "year": self.currentTime.year,
             "month": self.currentTime.month,
             "monthPos": 0
         }];
         if (self.currentTime.month == 0) {
-            year_months.unshift({
+            threeMonths.unshift({
                 "year": self.currentTime.year - 1,
                 "month": 11,
                 "monthPos": -1
             });
-            year_months.push({
+            threeMonths.push({
                 "year": self.currentTime.year,
                 "month": 1,
                 "monthPos": 1
             });
 
         } else if (self.currentTime.month == 11) {
-            year_months.unshift({
+            threeMonths.unshift({
                 "year": self.currentTime.year,
                 "month": 10,
                 "monthPos": -1
             });
-            year_months.push({
+            threeMonths.push({
                 "year": self.currentTime.year + 1,
                 "month": 0,
                 "monthPos": 1
             });
         } else {
-            year_months.unshift({
+            threeMonths.unshift({
                 "year": self.currentTime.year,
                 "month": self.currentTime.month - 1,
                 "monthPos": -1
             });
-            year_months.push({
+            threeMonths.push({
                 "year": self.currentTime.year,
                 "month": self.currentTime.month + 1,
                 "monthPos": 1
             });
         }
 
-        year_months.forEach(function (year_month) {
+        threeMonths.forEach(function (year_month) {
             var daysInMonth = new Date(year_month.year, year_month.month + 1, 0).getDate(); // date "zero" of next month
             if (year_month.monthPos == 0 && self.currentTime.date > daysInMonth) {
                 self.currentTime.date = daysInMonth;
