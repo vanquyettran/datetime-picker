@@ -183,7 +183,6 @@
         var startTime = new Date();
 
         new DatetimePicker(
-            document.getElementById("date_picker"),
             "2017/5/20 21:10:20",
             {
                 "weekdays": [
@@ -221,16 +220,20 @@
                         ;
                 }
             }
-        ).widget({
-            "dateBlock": {
-//                "extendedWeeks": {"before": 1, "after": 1},
-                "onClick": function (current) {
-                    console.log(current);
+        ).widget(
+            document.getElementById("date_picker"),
+            {
+                "dateBlock": {
+                    "extendedWeeks": {"before": 0, "after": 0},
+                    "onClick": function (current) {
+                        console.log(current);
+                    }
                 }
             }
-        });
+        );
 
         console.log("Duration: " + (new Date() - startTime) + "ms");
     </script>
+
 </body>
 </html>
