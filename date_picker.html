@@ -12,98 +12,104 @@
             font-size: 14px;
             color: #000;
         }
-        table {
-            border-collapse: separate;
-            border-spacing: 0;
+        .datetime-picker {
             /*background: #ccc;*/
             border: 1px solid #ccc;
         }
-        table td {
+        .datetime-picker {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .datetime-picker table {
+            border-collapse: separate;
+            border-spacing: 2px;
+        }
+        .datetime-picker td {
             /*background: #fff;*/
             /*padding: 0 0.5em;*/
             cursor: default;
             border: none;
             padding: 0;
         }
-        table td.jump2now-cell span,
-        table td.date-cell span,
-        table td.jump2today-cell span,
-        table td.next-year-cell span,
-        table td.previous-year-cell span,
-        table td.next-month-cell span,
-        table td.previous-month-cell span {
+        .datetime-picker td.jump2now-cell span,
+        .datetime-picker td.date-cell span,
+        .datetime-picker td.jump2today-cell span,
+        .datetime-picker td.next-year-cell span,
+        .datetime-picker td.previous-year-cell span,
+        .datetime-picker td.next-month-cell span,
+        .datetime-picker td.previous-month-cell span {
             cursor: pointer;
             display: inline-block;
         }
-        table td.jump2now-cell span:hover,
-        table td.date-cell span:hover,
-        table td.jump2today-cell span:hover,
-        table td.next-year-cell span:hover,
-        table td.previous-year-cell span:hover,
-        table td.next-month-cell span:hover,
-        table td.previous-month-cell span:hover {
+        .datetime-picker td.jump2now-cell span:hover,
+        .datetime-picker td.date-cell span:hover,
+        .datetime-picker td.jump2today-cell span:hover,
+        .datetime-picker td.next-year-cell span:hover,
+        .datetime-picker td.previous-year-cell span:hover,
+        .datetime-picker td.next-month-cell span:hover,
+        .datetime-picker td.previous-month-cell span:hover {
             background: #eee;
         }
-        table {
+        .datetime-picker {
             text-align: center;
         }
-        table .date-block {
+        .datetime-picker .date-block {
             text-align: right;
         }
-        table td.date-cell {
+        .datetime-picker td.date-cell {
             /*color: #ccc;*/
             opacity: 0.3;
         }
-        table span {
+        .datetime-picker span {
             display: inline-block;
         }
-        table td.date-cell.current-month {
+        .datetime-picker td.date-cell.current-month {
             /*color: #000;*/
             opacity: 1;
         }
-        table td.date-cell.current-date span {
+        .datetime-picker td.date-cell.current-date span {
             background: #ddd;
         }
-        table td.date-cell.today {
+        .datetime-picker td.date-cell.today {
             color: #f40;
         }
-        table .jump2now-cell span {
+        .datetime-picker .jump2now-cell span {
             /*padding-top: 0.2em;*/
             /*padding-bottom: 0.2em;*/
             /*background: #f8f8f8;*/
             /*border-top: 1px solid #eee;*/
         }
-        table .jump2now-cell span:before {
+        .datetime-picker .jump2now-cell span:before {
             content: "Bây giờ";
             color: #aaa;
             font-size: 0.8em;
             text-transform: uppercase;
         }
-        table .increase-cell span,
-        table .decrease-cell span {
+        .datetime-picker .increase-cell span,
+        .datetime-picker .decrease-cell span {
             width: 1.5em;
             height: 1.2em;
             /*line-height: 1em;*/
             /*vertical-align: baseline;*/
             /*text-align: center;*/
         }
-        table .increase-cell span {
+        .datetime-picker .increase-cell span {
             vertical-align: bottom;
         }
-        table .decrease-cell span {
+        .datetime-picker .decrease-cell span {
             vertical-align: top;
         }
-        table .increase-cell span:hover,
-        table .decrease-cell span:hover {
+        .datetime-picker .increase-cell span:hover,
+        .datetime-picker .decrease-cell span:hover {
             background: #eee;
         }
-        table .increase-cell span:before,
-        table .decrease-cell span:before {
+        .datetime-picker .increase-cell span:before,
+        .datetime-picker .decrease-cell span:before {
             color: #aaa;
             font-size: 0.8em;
         }
-        table .increase-cell span:before,
-        table .decrease-cell span:before {
+        .datetime-picker .increase-cell span:before,
+        .datetime-picker .decrease-cell span:before {
             content: "";
             display: block;
             width: 100%;
@@ -112,64 +118,67 @@
             background-repeat: no-repeat;
             background-size: 30%;
         }
-        table .increase-cell span:before {
+        .datetime-picker .increase-cell span:before {
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http:%2F%2Fwww.w3.org%2F2000%2Fsvg" width="452" height="452" viewBox="0 0 451.8 451.8"><path fill="%2368b" d="M248.3 106.4l194.3 194.3c12.4 12.4 12.4 32.4 0 44.7 -12.4 12.4-32.4 12.4-44.7 0L225.9 173.5 54 345.4c-12.4 12.4-32.4 12.4-44.7 0 -12.4-12.4-12.4-32.4 0-44.7L203.6 106.4c6.2-6.2 14.3-9.3 22.4-9.3C234 97.1 242.1 100.2 248.3 106.4z"%2F><%2Fsvg>');
         }
-        table .decrease-cell span:before {
+        .datetime-picker .decrease-cell span:before {
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http:%2F%2Fwww.w3.org%2F2000%2Fsvg" width="452" height="452" viewBox="0 0 451.8 451.8"><path fill="%23b86" d="M225.9 354.7c-8.1 0-16.2-3.1-22.4-9.3L9.3 151.2c-12.4-12.4-12.4-32.4 0-44.8 12.4-12.4 32.4-12.4 44.7 0l171.9 171.9 171.9-171.9c12.4-12.4 32.4-12.4 44.7 0 12.4 12.4 12.4 32.4 0 44.8L248.3 345.4C242.1 351.6 234 354.7 225.9 354.7z"%2F><%2Fsvg>');
         }
 
-        table .weekday-cell {
+        .datetime-picker .weekday-cell {
             color: #888;
             background: #f8f8f8;
         }
-        table .time-row td span:after {
+        .datetime-picker .time-row td span:after {
             color: #666;
             font-size: 0.9em;
         }
-        table .hours-cell span:after {
+        .datetime-picker .hours-cell span:after {
             content: " giờ";
         }
-        table .minutes-cell span:after {
+        .datetime-picker .minutes-cell span:after {
             content: " phút";
         }
-        table .seconds-cell span:after {
+        .datetime-picker .seconds-cell span:after {
             content: " giây";
         }
-        table .date-block tr:last-child td {
+        .datetime-picker .date-block tr:last-child td {
             /*border-bottom: 1px solid #eee;*/
         }
-        table .year-cell span {
+        .datetime-picker .year-cell span {
             /*letter-spacing: 0.1em;*/
         }
-        table .year-cell span:before {
+        .datetime-picker .year-cell span:before {
             content: "Năm ";
             font-size: 0.9em;
         }
-        table .month-cell {
+        .datetime-picker .month-cell {
         }
-        table .month-cell span:before {
+        .datetime-picker .month-cell span:before {
             content: "Tháng ";
             font-size: 0.9em;
         }
-        table .date-cell {
+        .datetime-picker .date-cell {
             /*padding-top: 0.1em;*/
             /*padding-bottom: 0.1em;*/
         }
-        table .increase-cell,
-        table .decrease-cell {
+        .datetime-picker .increase-cell,
+        .datetime-picker .decrease-cell {
             /*letter-spacing: 0.5em;*/
         }
-        table .weekday-cell span,
-        table .jump2now-cell span,
-        table .date-cell span {
+        .datetime-picker .weekday-cell span,
+        .datetime-picker .jump2now-cell span,
+        .datetime-picker .date-cell span {
             padding: 0.1em 0.5em;
         /*}*/
-        /*table .date-cell span {*/
+        /*.datetime-picker .date-cell span {*/
             display: block;
             width: 100%;
         }
-        /*table .control-block {display: none}*/
+        /*.datetime-picker .control-block {display: none}*/
+        .datetime-picker table {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -234,6 +243,5 @@
 
         console.log("Duration: " + (new Date() - startTime) + "ms");
     </script>
-
 </body>
 </html>

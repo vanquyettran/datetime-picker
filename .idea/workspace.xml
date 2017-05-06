@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ba622272-274b-4520-a825-d2389f3e6324" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/date_picker.html" afterPath="$PROJECT_DIR$/date_picker.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datetime.js" afterPath="$PROJECT_DIR$/datetime.js" />
     </list>
@@ -25,21 +24,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-      <file leaf-file-name="date_picker.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="date_picker.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/date_picker.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="621">
-              <caret line="236" column="0" selection-start-line="236" selection-start-column="0" selection-end-line="236" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="624">
+              <caret line="24" column="31" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="31" />
+              <folding>
+                <element signature="e#3881#4275#2" expanded="true" />
+                <element signature="e#4371#4764#2" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="datetime.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="datetime.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/datetime.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="468">
-              <caret line="470" column="0" selection-start-line="470" selection-start-column="0" selection-end-line="470" selection-end-column="0" />
+            <state relative-caret-position="612">
+              <caret line="101" column="17" selection-start-line="101" selection-start-column="17" selection-end-line="101" selection-end-column="17" />
               <folding>
                 <element signature="e#0#39#0" expanded="false" />
               </folding>
@@ -103,8 +105,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/date_picker.html" />
         <option value="$PROJECT_DIR$/datetime.js" />
+        <option value="$PROJECT_DIR$/date_picker.html" />
       </list>
     </option>
   </component>
@@ -249,7 +251,7 @@
       <workItem from="1493945837686" duration="4396000" />
       <workItem from="1493999919539" duration="4410000" />
       <workItem from="1494006397347" duration="2027000" />
-      <workItem from="1494052268956" duration="7624000" />
+      <workItem from="1494052268956" duration="8792000" />
     </task>
     <task id="LOCAL-00001" summary="date picker">
       <created>1493662572848</created>
@@ -276,7 +278,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="100204000" />
+    <option name="totallyTimeSpent" value="101372000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-10" y="0" width="1934" height="1044" extended-state="0" />
@@ -367,7 +369,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#3881#4275#2" expanded="true" />
+            <element signature="e#4371#4764#2" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -417,7 +422,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#3881#4275#2" expanded="true" />
+            <element signature="e#4371#4764#2" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -467,7 +475,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3380">
           <caret line="130" column="31" selection-start-line="130" selection-start-column="31" selection-end-line="130" selection-end-column="31" />
-          <folding />
+          <folding>
+            <element signature="e#3881#4275#2" expanded="true" />
+            <element signature="e#4371#4764#2" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -517,7 +528,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#3881#4275#2" expanded="true" />
+            <element signature="e#4371#4764#2" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -567,7 +581,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2470">
           <caret line="95" column="10" selection-start-line="95" selection-start-column="10" selection-end-line="95" selection-end-column="10" />
-          <folding />
+          <folding>
+            <element signature="e#3881#4275#2" expanded="true" />
+            <element signature="e#4371#4764#2" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -617,7 +634,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#3881#4275#2" expanded="true" />
+            <element signature="e#4371#4764#2" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -659,7 +679,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#3881#4275#2" expanded="true" />
+            <element signature="e#4371#4764#2" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -721,14 +744,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/date_picker.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="621">
-          <caret line="236" column="0" selection-start-line="236" selection-start-column="0" selection-end-line="236" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bak2_datetime.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -739,10 +754,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/datetime.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="470" column="0" selection-start-line="470" selection-start-column="0" selection-end-line="470" selection-end-column="0" />
+        <state relative-caret-position="612">
+          <caret line="101" column="17" selection-start-line="101" selection-start-column="17" selection-end-line="101" selection-end-column="17" />
           <folding>
             <element signature="e#0#39#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/date_picker.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="624">
+          <caret line="24" column="31" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="31" />
+          <folding>
+            <element signature="e#3881#4275#2" expanded="true" />
+            <element signature="e#4371#4764#2" expanded="true" />
           </folding>
         </state>
       </provider>
