@@ -31,7 +31,9 @@
             border: none;
             padding: 0;
         }
-        .datetime-picker td.jump2now-cell span,
+        .datetime-picker td.submit-cell span,
+        .datetime-picker td.reset-cell span,
+        .datetime-picker td.present-cell span,
         .datetime-picker td.date-cell span,
         .datetime-picker td.jump2today-cell span,
         .datetime-picker td.next-year-cell span,
@@ -41,7 +43,9 @@
             cursor: pointer;
             display: inline-block;
         }
-        .datetime-picker td.jump2now-cell span:hover,
+        .datetime-picker td.submit-cell span:hover,
+        .datetime-picker td.reset-cell span:hover,
+        .datetime-picker td.present-cell span:hover,
         .datetime-picker td.date-cell span:hover,
         .datetime-picker td.jump2today-cell span:hover,
         .datetime-picker td.next-year-cell span:hover,
@@ -73,17 +77,21 @@
         .datetime-picker td.date-cell.today {
             color: #f40;
         }
-        .datetime-picker .jump2now-cell span {
-            /*padding-top: 0.2em;*/
-            /*padding-bottom: 0.2em;*/
-            /*background: #f8f8f8;*/
-            /*border-top: 1px solid #eee;*/
-        }
-        .datetime-picker .jump2now-cell span:before {
-            content: "Bây giờ";
+        .datetime-picker .submit-cell span:before,
+        .datetime-picker .reset-cell span:before,
+        .datetime-picker .present-cell span:before {
+            content: "Hiện tại";
             color: #aaa;
             font-size: 0.8em;
             text-transform: uppercase;
+        }
+
+        .datetime-picker .reset-cell span:before {
+            content: "Ban đầu";
+        }
+        .datetime-picker .submit-cell span:before {
+            content: "Xong";
+            color: #06c;
         }
         .datetime-picker .increase-cell span,
         .datetime-picker .decrease-cell span {
@@ -167,11 +175,11 @@
             /*letter-spacing: 0.5em;*/
         }
         .datetime-picker .weekday-cell span,
-        .datetime-picker .jump2now-cell span,
+        .datetime-picker .present-cell span,
+        .datetime-picker .reset-cell span,
+        .datetime-picker .submit-cell span,
         .datetime-picker .date-cell span {
             padding: 0.1em 0.5em;
-        /*}*/
-        /*.datetime-picker .date-cell span {*/
             display: block;
             width: 100%;
         }
@@ -192,7 +200,7 @@
         var startTime = new Date();
 
         new DatetimePicker(
-            "2017/5/20 21:10:20",
+            new Date("2017/5/20 21:10:20"),
             {
                 "weekdays": [
                     "CN",
@@ -218,15 +226,6 @@
                     "Mười Hai"
                 ],
                 "onChange": function (current) {
-                    document.getElementById("date").value
-                        = "Y/m/d H:i:s"
-                        .replace(/Y/g, current.year)
-                        .replace(/m/g, current.month + 1)
-                        .replace(/d/g, current.date)
-                        .replace(/H/g, current.hours)
-                        .replace(/i/g, current.minutes)
-                        .replace(/s/g, current.seconds)
-                        ;
                 }
             }
         ).widget(
@@ -235,7 +234,19 @@
                 "dateBlock": {
                     "extendedWeeks": {"before": 0, "after": 0},
                     "onClick": function (current) {
-                        console.log(current);
+                    }
+                },
+                "controlBlock": {
+                    "onSubmit": function (current) {
+                        document.getElementById("date").value
+                                = "Y/m/d H:i:s"
+                                .replace(/Y/g, current.year)
+                                .replace(/m/g, current.month + 1)
+                                .replace(/d/g, current.date)
+                                .replace(/H/g, current.hours)
+                                .replace(/i/g, current.minutes)
+                                .replace(/s/g, current.seconds)
+                        ;
                     }
                 }
             }

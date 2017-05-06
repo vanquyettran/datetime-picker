@@ -25,7 +25,7 @@ var DatetimePicker = function (initTime, options) {
     }
 
     this.currentTime = {
-        time: initTime,
+        time: new Date(),
         eventListeners: {
             "change": []
         },
@@ -88,6 +88,13 @@ var DatetimePicker = function (initTime, options) {
             this.callEventListeners("change");
         }
     };
+
+    this.currentTime.year = initTime.getFullYear();
+    this.currentTime.month = initTime.getMonth();
+    this.currentTime.date = initTime.getDate();
+    this.currentTime.hours = initTime.getHours();
+    this.currentTime.minutes = initTime.getMinutes();
+    this.currentTime.seconds = initTime.getSeconds();
 
     if (typeof options.onChange == "function") {
         this.currentTime.addEventListeners("change", function () {
@@ -160,10 +167,8 @@ DatetimePicker.prototype.yearMonthBlock = function (options) {
             actCell = document.createElement("td");
             if (unit == "year") {
                 changes = [100, 10, 1];
-                // actCell.colSpan = 3;
             } else {
                 changes = [1];
-                // actCell.colSpan = 4;
             }
             actCell.className = act + "-cell";
             actRow.appendChild(actCell);
@@ -190,7 +195,6 @@ DatetimePicker.prototype.yearMonthBlock = function (options) {
 
     var yearCell = document.createElement("td");
     yearCell.className = "year-cell";
-    // yearCell.colSpan = 3;
     yearMonthRow.appendChild(yearCell);
 
     var yearSpan = document.createElement("span");
@@ -198,7 +202,6 @@ DatetimePicker.prototype.yearMonthBlock = function (options) {
 
     var monthCell = document.createElement("td");
     monthCell.className = "month-cell";
-    // monthCell.colSpan = 4;
     yearMonthRow.appendChild(monthCell);
 
     var monthSpan = document.createElement("span");
@@ -515,19 +518,16 @@ DatetimePicker.prototype.controlBlock = function (options) {
     var controlBlock = document.createElement("table");
     controlBlock.className = "control-block";
 
-    var jump2nowRow = document.createElement("tr");
-    jump2nowRow.className = "jump2now-row";
-    controlBlock.appendChild(jump2nowRow);
+    var row = document.createElement("tr");
+    controlBlock.appendChild(row);
 
-    var jump2nowCell = document.createElement("td");
-    jump2nowRow.appendChild(jump2nowCell);
-    jump2nowCell.className = "jump2now-cell";
-    jump2nowCell.colSpan = 7;
+    var presentCell = document.createElement("td");
+    presentCell.className = "present-cell";
 
-    var jump2nowSpan = document.createElement("span");
-    jump2nowCell.appendChild(jump2nowSpan);
+    var presentSpan = document.createElement("span");
+    presentCell.appendChild(presentSpan);
 
-    jump2nowSpan.addEventListener("click", function () {
+    presentSpan.addEventListener("click", function () {
         var now = new Date();
         self.currentTime.year = now.getFullYear();
         self.currentTime.month = now.getMonth();
@@ -536,6 +536,38 @@ DatetimePicker.prototype.controlBlock = function (options) {
         self.currentTime.minutes = now.getMinutes();
         self.currentTime.seconds = now.getSeconds();
     });
+
+    var resetCell = document.createElement("td");
+    resetCell.className = "reset-cell";
+
+    var resetSpan = document.createElement("span");
+    resetCell.appendChild(resetSpan);
+
+    resetSpan.addEventListener("click", function () {
+        self.currentTime.year = self.initTime.getFullYear();
+        self.currentTime.month = self.initTime.getMonth();
+        self.currentTime.date = self.initTime.getDate();
+        self.currentTime.hours = self.initTime.getHours();
+        self.currentTime.minutes = self.initTime.getMinutes();
+        self.currentTime.seconds = self.initTime.getSeconds();
+    });
+
+    var submitCell = document.createElement("td");
+    submitCell.className = "submit-cell";
+
+    var submitSpan = document.createElement("span");
+    submitCell.appendChild(submitSpan);
+
+    submitSpan.addEventListener("click", function () {
+        if (typeof options.onSubmit == "function") {
+            options.onSubmit(self.currentTime);
+        }
+    });
+
+    row.appendChild(resetCell);
+    row.appendChild(presentCell);
+    row.appendChild(submitCell);
+
 
     return controlBlock;
 };
