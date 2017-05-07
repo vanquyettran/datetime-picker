@@ -103,6 +103,26 @@ var DatetimePicker = function (initTime, options) {
     }
 };
 
+/**
+ *
+ * @param className
+ * @returns {string}
+ */
+DatetimePicker.prototype.newClassName = function (className) {
+    var prefix = "datetimePicker__";
+    if (typeof this.options.classNamePrefix == "string") {
+        prefix = this.options.classNamePrefix;
+    }
+    return prefix + className;
+};
+
+/**
+ *
+ * @param container
+ * @param itemNames
+ * @param itemsReference
+ * @param renderItem
+ */
 DatetimePicker.prototype.renderItems = function (container, itemNames, itemsReference, renderItem) {
     if (!(container instanceof HTMLElement)) {
         throw TypeError("renderItems: \"container\" must be an HTMLElement");
@@ -153,7 +173,7 @@ DatetimePicker.prototype.widget = function (options) {
     }
 
     var picker = document.createElement("table");
-    picker.className = "datetime-picker";
+    picker.className = this.newClassName("widget");
 
     // Render view
     var itemsReference = {
@@ -194,20 +214,20 @@ DatetimePicker.prototype.yearMonthBlock = function (options) {
     }
 
     var yearMonthBlock = document.createElement("table");
-    yearMonthBlock.className = "year-month-block";
+    yearMonthBlock.className = this.newClassName("year-month-block");
 
     var yearMonthRow = document.createElement("tr");
-    yearMonthRow.className = "year-month-row";
+    yearMonthRow.className = this.newClassName("year-month-row");
     yearMonthBlock.appendChild(yearMonthRow);
 
     var yearCell = document.createElement("td");
-    yearCell.className = "year-cell";
+    yearCell.className = this.newClassName("year-cell");
     yearCell.unit = "year";
     yearCell.actionChanges = [100, 10, 1];
     yearCell.valueSpan = document.createElement("span");
 
     var monthCell = document.createElement("td");
-    monthCell.className = "month-cell";
+    monthCell.className = this.newClassName("month-cell");
     monthCell.unit = "month";
     monthCell.actionChanges = [1];
     monthCell.valueSpan = document.createElement("span");
@@ -215,7 +235,7 @@ DatetimePicker.prototype.yearMonthBlock = function (options) {
     [yearCell, monthCell].forEach(function (block) {
         ["increase", "decrease"].forEach(function (action) {
             var actRow = document.createElement("div");
-            actRow.className = action + "-div";
+            actRow.className = self.newClassName(action + "-div");
             block.appendChild(actRow);
             block.actionChanges.forEach(function (change) {
                 var actSpan = document.createElement("span");
@@ -233,7 +253,7 @@ DatetimePicker.prototype.yearMonthBlock = function (options) {
             });
         });
         var valueDiv = document.createElement("div");
-        valueDiv.className = "value-div";
+        valueDiv.className = self.newClassName("value-div");
         valueDiv.appendChild(block.valueSpan);
         block.insertBefore(valueDiv, block.children[1]);
     });
@@ -294,17 +314,17 @@ DatetimePicker.prototype.dateBlock = function (options) {
 
     // Date block
     var dateBlock = document.createElement("table");
-    dateBlock.className = "date-block";
+    dateBlock.className = this.newClassName("date-block");
 
     var weekdayRow = document.createElement("tr");
-    weekdayRow.className = "weekday-row";
+    weekdayRow.className = this.newClassName("weekday-row");
     dateBlock.appendChild(weekdayRow);
 
     var weekdayCell;
     var weekdaySpan;
     for (var i = 0; i < 7; i++) {
         weekdayCell = document.createElement("td");
-        weekdayCell.className = "weekday-cell";
+        weekdayCell.className = this.newClassName("weekday-cell");
         weekdayRow.appendChild(weekdayCell);
 
         weekdaySpan = document.createElement("span");
@@ -408,35 +428,35 @@ DatetimePicker.prototype.dateBlock = function (options) {
                     }
                 }
                 dateRow = document.createElement("tr");
-                dateRow.className = "date-row";
+                dateRow.className = self.newClassName("date-row");
                 dateBlock.appendChild(dateRow);
             }
             if (dateRow) {
                 dateCell = document.createElement("td");
                 dateRow.appendChild(dateCell);
-                dateCell.className = "date-cell";
+                dateCell.className = self.newClassName("date-cell");
 
                 // Marks item is today
                 if (item.isToday) {
-                    dateCell.classList.add("today");
+                    dateCell.classList.add(self.newClassName("today"));
                 }
 
                 // Marks item is before/current/after month
                 if (item.monthPos == -1) {
-                    dateCell.classList.add("before-month");
+                    dateCell.classList.add(self.newClassName("before-month"));
                 } else if (item.monthPos == 1) {
-                    dateCell.classList.add("after-month");
+                    dateCell.classList.add(self.newClassName("after-month"));
                 } else {
-                    dateCell.classList.add("current-month");
+                    dateCell.classList.add(self.newClassName("current-month"));
                 }
 
                 // Marks item is before/current/after date
                 if (item.datePos == -1) {
-                    dateCell.classList.add("before-date");
+                    dateCell.classList.add(self.newClassName("before-date"));
                 } else if (item.datePos == 1) {
-                    dateCell.classList.add("after-date");
+                    dateCell.classList.add(self.newClassName("after-date"));
                 } else {
-                    dateCell.classList.add("current-date");
+                    dateCell.classList.add(self.newClassName("current-date"));
                 }
 
                 dateSpan = document.createElement("span");
@@ -482,34 +502,34 @@ DatetimePicker.prototype.timeBlock = function (options) {
 
     // Creates table for the calendar
     var timeBlock = document.createElement("table");
-    timeBlock.className = "time-block";
+    timeBlock.className = this.newClassName("time-block");
 
     var timeRow = document.createElement("tr");
-    timeRow.className = "time-row";
+    timeRow.className = this.newClassName("time-row");
     timeBlock.appendChild(timeRow);
 
     var hoursCell = document.createElement("td");
-    hoursCell.className = "hours-cell";
+    hoursCell.className = this.newClassName("hours-cell");
     hoursCell.unit = "hours";
     hoursCell.actionChanges = [10, 1];
     hoursCell.valueSpan = document.createElement("span");
-    
+
     var minutesCell = document.createElement("td");
-    minutesCell.className = "minutes-cell";
+    minutesCell.className = this.newClassName("minutes-cell");
     minutesCell.unit = "minutes";
     minutesCell.actionChanges = [10, 1];
     minutesCell.valueSpan = document.createElement("span");
-    
+
     var secondsCell = document.createElement("td");
-    secondsCell.className = "seconds-cell";
+    secondsCell.className = this.newClassName("seconds-cell");
     secondsCell.unit = "seconds";
     secondsCell.actionChanges = [10, 1];
     secondsCell.valueSpan = document.createElement("span");
-    
+
     [hoursCell, minutesCell, secondsCell].forEach(function (block) {
         ["increase", "decrease"].forEach(function (action) {
             var actRow = document.createElement("div");
-            actRow.className = action + "-div";
+            actRow.className = self.newClassName(action + "-div");
             block.appendChild(actRow);
             block.actionChanges.forEach(function (change) {
                 var actSpan = document.createElement("span");
@@ -527,7 +547,7 @@ DatetimePicker.prototype.timeBlock = function (options) {
             });
         });
         var valueDiv = document.createElement("div");
-        valueDiv.className = "value-div";
+        valueDiv.className = self.newClassName("value-div");
         valueDiv.appendChild(block.valueSpan);
         block.insertBefore(valueDiv, block.children[1]);
     });
@@ -575,13 +595,13 @@ DatetimePicker.prototype.controlBlock = function (options) {
     }
 
     var controlBlock = document.createElement("table");
-    controlBlock.className = "control-block";
+    controlBlock.className = this.newClassName("control-block");
 
     var row = document.createElement("tr");
     controlBlock.appendChild(row);
 
     var set2nowCell = document.createElement("td");
-    set2nowCell.className = "set2now-cell";
+    set2nowCell.className = this.newClassName("set2now-cell");
 
     var set2nowSpan = document.createElement("span");
     set2nowCell.appendChild(set2nowSpan);
@@ -597,7 +617,7 @@ DatetimePicker.prototype.controlBlock = function (options) {
     });
 
     var resetCell = document.createElement("td");
-    resetCell.className = "reset-cell";
+    resetCell.className = this.newClassName("reset-cell");
 
     var resetSpan = document.createElement("span");
     resetCell.appendChild(resetSpan);
@@ -612,7 +632,7 @@ DatetimePicker.prototype.controlBlock = function (options) {
     });
 
     var submitCell = document.createElement("td");
-    submitCell.className = "submit-cell";
+    submitCell.className = this.newClassName("submit-cell");
 
     var submitSpan = document.createElement("span");
     submitCell.appendChild(submitSpan);

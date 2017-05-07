@@ -4,100 +4,100 @@
     <meta charset="UTF-8">
     <title>Date picker</title>
     <style>
-        .datetime-picker,
-        .datetime-picker * {
+        .datetimePicker__widget,
+        .datetimePicker__widget * {
             box-sizing: border-box;
         }
-        .datetime-picker {
+        .datetimePicker__widget {
             font-family: Arial, sans-serif;
             font-size: 14px;
             color: #000;
             border: 1px solid #ccc;
         }
-        .datetime-picker {
+        .datetimePicker__widget {
             border-collapse: separate;
             border-spacing: 0;
         }
-        .datetime-picker table {
+        .datetimePicker__widget table {
             border-collapse: separate;
             border-spacing: 2px;
         }
-        .datetime-picker td {
+        .datetimePicker__widget td {
             cursor: default;
             border: none;
             padding: 0;
         }
-        .datetime-picker td.submit-cell span,
-        .datetime-picker td.reset-cell span,
-        .datetime-picker td.set2now-cell span,
-        .datetime-picker td.date-cell span {
+        .datetimePicker__widget td.datetimePicker__submit-cell span,
+        .datetimePicker__widget td.datetimePicker__reset-cell span,
+        .datetimePicker__widget td.datetimePicker__set2now-cell span,
+        .datetimePicker__widget td.datetimePicker__date-cell span {
             cursor: pointer;
             display: inline-block;
         }
-        .datetime-picker td.submit-cell span:hover,
-        .datetime-picker td.reset-cell span:hover,
-        .datetime-picker td.set2now-cell span:hover,
-        .datetime-picker td.date-cell span:hover {
+        .datetimePicker__widget td.datetimePicker__submit-cell span:hover,
+        .datetimePicker__widget td.datetimePicker__reset-cell span:hover,
+        .datetimePicker__widget td.datetimePicker__set2now-cell span:hover,
+        .datetimePicker__widget td.datetimePicker__date-cell span:hover {
             background: #eee;
         }
-        .datetime-picker {
+        .datetimePicker__widget {
             text-align: center;
         }
-        .datetime-picker .date-block {
+        .datetimePicker__widget .datetimePicker__date-block {
             text-align: right;
         }
-        .datetime-picker td.date-cell {
+        .datetimePicker__widget td.datetimePicker__date-cell {
             opacity: 0.3;
         }
-        .datetime-picker span {
+        .datetimePicker__widget span {
             display: inline-block;
         }
-        .datetime-picker td.date-cell.current-month {
+        .datetimePicker__widget td.datetimePicker__date-cell.datetimePicker__current-month {
             opacity: 1;
         }
-        .datetime-picker td.date-cell.current-date span {
+        .datetimePicker__widget td.datetimePicker__date-cell.datetimePicker__current-date span {
             background: #ddd;
         }
-        .datetime-picker td.date-cell.today {
+        .datetimePicker__widget td.datetimePicker__date-cell.datetimePicker__today {
             color: #f40;
         }
-        .datetime-picker .submit-cell span:before,
-        .datetime-picker .reset-cell span:before,
-        .datetime-picker .set2now-cell span:before {
+        .datetimePicker__widget .datetimePicker__submit-cell span:before,
+        .datetimePicker__widget .datetimePicker__reset-cell span:before,
+        .datetimePicker__widget .datetimePicker__set2now-cell span:before {
             content: "Hiện tại";
             color: #aaa;
             font-size: 0.8em;
             text-transform: uppercase;
         }
-        .datetime-picker .reset-cell span:before {
+        .datetimePicker__widget .datetimePicker__reset-cell span:before {
             content: "Ban đầu";
         }
-        .datetime-picker .submit-cell span:before {
+        .datetimePicker__widget .datetimePicker__submit-cell span:before {
             content: "Xong";
             color: #06c;
         }
-        .datetime-picker .increase-div span,
-        .datetime-picker .decrease-div span {
+        .datetimePicker__widget .datetimePicker__increase-div span,
+        .datetimePicker__widget .datetimePicker__decrease-div span {
             width: 1.5em;
             height: 1.2em;
         }
-        .datetime-picker .increase-div span {
+        .datetimePicker__widget .datetimePicker__increase-div span {
             vertical-align: bottom;
         }
-        .datetime-picker .decrease-div span {
+        .datetimePicker__widget .datetimePicker__decrease-div span {
             vertical-align: top;
         }
-        .datetime-picker .increase-div span:hover,
-        .datetime-picker .decrease-div span:hover {
+        .datetimePicker__widget .datetimePicker__increase-div span:hover,
+        .datetimePicker__widget .datetimePicker__decrease-div span:hover {
             background: #eee;
         }
-        .datetime-picker .increase-div span:before,
-        .datetime-picker .decrease-div span:before {
+        .datetimePicker__widget .datetimePicker__increase-div span:before,
+        .datetimePicker__widget .datetimePicker__decrease-div span:before {
             color: #aaa;
             font-size: 0.8em;
         }
-        .datetime-picker .increase-div span:before,
-        .datetime-picker .decrease-div span:before {
+        .datetimePicker__widget .datetimePicker__increase-div span:before,
+        .datetimePicker__widget .datetimePicker__decrease-div span:before {
             content: "";
             display: block;
             width: 100%;
@@ -106,48 +106,48 @@
             background-repeat: no-repeat;
             background-size: 30%;
         }
-        .datetime-picker .increase-div span:before {
+        .datetimePicker__widget .datetimePicker__increase-div span:before {
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http:%2F%2Fwww.w3.org%2F2000%2Fsvg" width="452" height="452" viewBox="0 0 451.8 451.8"><path fill="%2368b" d="M248.3 106.4l194.3 194.3c12.4 12.4 12.4 32.4 0 44.7 -12.4 12.4-32.4 12.4-44.7 0L225.9 173.5 54 345.4c-12.4 12.4-32.4 12.4-44.7 0 -12.4-12.4-12.4-32.4 0-44.7L203.6 106.4c6.2-6.2 14.3-9.3 22.4-9.3C234 97.1 242.1 100.2 248.3 106.4z"%2F><%2Fsvg>');
         }
-        .datetime-picker .decrease-div span:before {
+        .datetimePicker__widget .datetimePicker__decrease-div span:before {
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http:%2F%2Fwww.w3.org%2F2000%2Fsvg" width="452" height="452" viewBox="0 0 451.8 451.8"><path fill="%23b86" d="M225.9 354.7c-8.1 0-16.2-3.1-22.4-9.3L9.3 151.2c-12.4-12.4-12.4-32.4 0-44.8 12.4-12.4 32.4-12.4 44.7 0l171.9 171.9 171.9-171.9c12.4-12.4 32.4-12.4 44.7 0 12.4 12.4 12.4 32.4 0 44.8L248.3 345.4C242.1 351.6 234 354.7 225.9 354.7z"%2F><%2Fsvg>');
         }
 
-        .datetime-picker .weekday-cell {
+        .datetimePicker__widget .datetimePicker__weekday-cell {
             color: #888;
             background: #f8f8f8;
         }
-        .datetime-picker .time-row td span:after {
+        .datetimePicker__widget .datetimePicker__time-row td span:after {
             color: #666;
             font-size: 0.9em;
         }
-        .datetime-picker .hours-cell .value-div span:after {
+        .datetimePicker__widget .datetimePicker__hours-cell .datetimePicker__value-div span:after {
             content: " giờ";
         }
-        .datetime-picker .minutes-cell .value-div span:after {
+        .datetimePicker__widget .datetimePicker__minutes-cell .datetimePicker__value-div span:after {
             content: " phút";
         }
-        .datetime-picker .seconds-cell .value-div span:after {
+        .datetimePicker__widget .datetimePicker__seconds-cell .datetimePicker__value-div span:after {
             content: " giây";
         }
-        .datetime-picker .year-cell .value-div span:before {
+        .datetimePicker__widget .datetimePicker__year-cell .datetimePicker__value-div span:before {
             content: "Năm ";
             font-size: 0.9em;
         }
-        .datetime-picker .month-cell .value-div span:before {
+        .datetimePicker__widget .datetimePicker__month-cell .datetimePicker__value-div span:before {
             content: "Tháng ";
             font-size: 0.9em;
         }
-        .datetime-picker .weekday-cell span,
-        .datetime-picker .set2now-cell span,
-        .datetime-picker .reset-cell span,
-        .datetime-picker .submit-cell span,
-        .datetime-picker .date-cell span {
+        .datetimePicker__widget .datetimePicker__weekday-cell span,
+        .datetimePicker__widget .datetimePicker__set2now-cell span,
+        .datetimePicker__widget .datetimePicker__reset-cell span,
+        .datetimePicker__widget .datetimePicker__submit-cell span,
+        .datetimePicker__widget .datetimePicker__date-cell span {
             padding: 0.1em 0.5em;
             display: block;
             width: 100%;
         }
-        .datetime-picker table {
+        .datetimePicker__widget table {
             width: 100%;
         }
     </style>
@@ -160,12 +160,13 @@
     <div id="datetime-container"></div>
     <script src="datetime.js"></script>
     <script>
-        var datetimePicker = new DatetimePicker(
+        var datetimePickerWidget = new DatetimePicker(
             new Date("2017/5/20 21:10:20"),
             {
                 "weekdays": ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
                 "months": ["Giêng", "Hai", "Ba", "Tư", "Năm", "Sáu", "Bảy", "Tám", "Chín", "Mười", "Mười Một", "Mười Hai"],
-                "onChange": function (current) {}
+                "onChange": function (current) {},
+                "classNamePrefix": "datetimePicker__"
             }
         ).widget(
             {
@@ -197,7 +198,7 @@
             }
         );
 
-        document.getElementById("datetime-container").appendChild(datetimePicker);
+        document.getElementById("datetime-container").appendChild(datetimePickerWidget);
     </script>
 </body>
 </html>
