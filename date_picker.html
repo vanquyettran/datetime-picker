@@ -4,16 +4,14 @@
     <meta charset="UTF-8">
     <title>Date picker</title>
     <style>
-        * {
+        .datetime-picker,
+        .datetime-picker * {
             box-sizing: border-box;
         }
-        html {
+        .datetime-picker {
             font-family: Arial, sans-serif;
             font-size: 14px;
             color: #000;
-        }
-        .datetime-picker {
-            /*background: #ccc;*/
             border: 1px solid #ccc;
         }
         .datetime-picker {
@@ -25,8 +23,6 @@
             border-spacing: 2px;
         }
         .datetime-picker td {
-            /*background: #fff;*/
-            /*padding: 0 0.5em;*/
             cursor: default;
             border: none;
             padding: 0;
@@ -61,14 +57,12 @@
             text-align: right;
         }
         .datetime-picker td.date-cell {
-            /*color: #ccc;*/
             opacity: 0.3;
         }
         .datetime-picker span {
             display: inline-block;
         }
         .datetime-picker td.date-cell.current-month {
-            /*color: #000;*/
             opacity: 1;
         }
         .datetime-picker td.date-cell.current-date span {
@@ -85,7 +79,6 @@
             font-size: 0.8em;
             text-transform: uppercase;
         }
-
         .datetime-picker .reset-cell span:before {
             content: "Ban đầu";
         }
@@ -97,9 +90,6 @@
         .datetime-picker .decrease-div span {
             width: 1.5em;
             height: 1.2em;
-            /*line-height: 1em;*/
-            /*vertical-align: baseline;*/
-            /*text-align: center;*/
         }
         .datetime-picker .increase-div span {
             vertical-align: bottom;
@@ -150,29 +140,13 @@
         .datetime-picker .seconds-cell .value-div span:after {
             content: " giây";
         }
-        .datetime-picker .date-block tr:last-child td {
-            /*border-bottom: 1px solid #eee;*/
-        }
-        .datetime-picker .year-cell .value-div span {
-            /*letter-spacing: 0.1em;*/
-        }
         .datetime-picker .year-cell .value-div span:before {
             content: "Năm ";
             font-size: 0.9em;
         }
-        .datetime-picker .month-cell .value-div {
-        }
         .datetime-picker .month-cell .value-div span:before {
             content: "Tháng ";
             font-size: 0.9em;
-        }
-        .datetime-picker .date-cell {
-            /*padding-top: 0.1em;*/
-            /*padding-bottom: 0.1em;*/
-        }
-        .datetime-picker .increase-div,
-        .datetime-picker .decrease-div {
-            /*letter-spacing: 0.5em;*/
         }
         .datetime-picker .weekday-cell span,
         .datetime-picker .set2now-cell span,
@@ -183,7 +157,6 @@
             display: block;
             width: 100%;
         }
-        /*.datetime-picker .control-block {display: none}*/
         .datetime-picker table {
             width: 100%;
         }

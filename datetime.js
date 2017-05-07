@@ -224,6 +224,7 @@ DatetimePicker.prototype.yearMonthBlock = function (options) {
             block.actionChanges.forEach(function (change) {
                 var actSpan = document.createElement("span");
                 actRow.appendChild(actSpan);
+                actSpan.setAttribute("data-action", action);
                 actSpan.setAttribute("data-change", change);
                 actSpan.setAttribute("data-unit", block.unit);
                 actSpan.addEventListener("click", function (event) {
@@ -449,6 +450,7 @@ DatetimePicker.prototype.dateBlock = function (options) {
                 dateSpan.setAttribute("data-year", item.year);
                 dateSpan.setAttribute("data-month", item.month);
                 dateSpan.setAttribute("data-date", item.date);
+                dateSpan.setAttribute("data-day", item.day);
 
                 dateSpan.innerHTML = item.date;
                 dateSpan.addEventListener("click", function () {
@@ -486,65 +488,6 @@ DatetimePicker.prototype.timeBlock = function (options) {
     var timeBlock = document.createElement("table");
     timeBlock.className = "time-block";
 
-    /*
-    var actRow;
-    var actCell;
-    var actSpan;
-    ["increase", "decrease"].forEach(function (act) {
-        actRow = document.createElement("tr");
-        actRow.className = act + "-row";
-        timeBlock.appendChild(actRow);
-        ["hours", "minutes", "seconds"].forEach(function (unit) {
-            actCell = document.createElement("td");
-            actCell.colSpan = 2;
-            actCell.className = act + "-cell";
-            actRow.appendChild(actCell);
-            [10, 1].forEach(function (change) {
-                actSpan = document.createElement("span");
-                actCell.appendChild(actSpan);
-                actSpan.setAttribute("data-change", change);
-                actSpan.setAttribute("data-unit", unit);
-                actSpan.addEventListener("click", function (event) {
-                    if (act == "increase") {
-                        self.currentTime[unit] += change;
-                    } else {
-                        self.currentTime[unit] -= change;
-                    }
-                });
-            });
-        });
-    });
-
-    // Time row
-    var timeRow = document.createElement("tr");
-    timeRow.className = "time-row";
-    timeBlock.insertBefore(timeRow, timeBlock.children[1]);
-
-    var hoursCell = document.createElement("td");
-    hoursCell.className = "hours-cell";
-    hoursCell.colSpan = 2;
-    timeRow.appendChild(hoursCell);
-
-    var hoursSpan = document.createElement("span");
-    hoursCell.appendChild(hoursSpan);
-
-    var minutesCell = document.createElement("td");
-    minutesCell.className = "minutes-cell";
-    minutesCell.colSpan = 2;
-    timeRow.appendChild(minutesCell);
-
-    var minutesSpan = document.createElement("span");
-    minutesCell.appendChild(minutesSpan);
-
-    var secondsCell = document.createElement("td");
-    secondsCell.className = "seconds-cell";
-    secondsCell.colSpan = 2;
-    timeRow.appendChild(secondsCell);
-
-    var secondsSpan = document.createElement("span");
-    secondsCell.appendChild(secondsSpan);
-    */
-
     var timeRow = document.createElement("tr");
     timeRow.className = "time-row";
     timeBlock.appendChild(timeRow);
@@ -575,6 +518,7 @@ DatetimePicker.prototype.timeBlock = function (options) {
             block.actionChanges.forEach(function (change) {
                 var actSpan = document.createElement("span");
                 actRow.appendChild(actSpan);
+                actSpan.setAttribute("data-action", action);
                 actSpan.setAttribute("data-change", change);
                 actSpan.setAttribute("data-unit", block.unit);
                 actSpan.addEventListener("click", function (event) {
