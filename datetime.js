@@ -108,7 +108,7 @@ DatetimePicker.prototype.renderItems = function (container, itemNames, itemsRefe
         throw TypeError("renderItems: \"container\" must be an HTMLElement");
     }
     if (!(itemNames instanceof Array)) {
-        throw TypeError("renderItems: \"items\" must be an Array");
+        throw TypeError("renderItems: \"itemNames\" must be an Array");
     }
 
     if (typeof itemsReference != "object") {
@@ -149,10 +149,8 @@ DatetimePicker.prototype.renderItems = function (container, itemNames, itemsRefe
 DatetimePicker.prototype.widget = function (container, options) {
     var self = this;
 
-    if (!container) {
-        throw Error("Container is required");
-    } else if (container.nodeName != "TABLE") {
-        throw Error("Container must be the table");
+    if (!(container instanceof HTMLElement) || container.nodeName != "TABLE") {
+        throw TypeError("widget: \"container\" must be an table");
     }
 
     if (typeof options != "object") {
@@ -292,7 +290,7 @@ DatetimePicker.prototype.dateBlock = function (options) {
             || options.extendedWeeks.after > 3
             || options.extendedWeeks.after < 0
         ) {
-            throw Error("Date block: Options.extendedWeeks.before/after must be in range [0, 3]");
+            throw Error("dateBlock: \"options.extendedWeeks.before/after\" must be in range [0, 3]");
         }
     }
 
