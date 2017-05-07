@@ -30,24 +30,14 @@
         .datetime-picker td.submit-cell span,
         .datetime-picker td.reset-cell span,
         .datetime-picker td.set2now-cell span,
-        .datetime-picker td.date-cell span,
-        .datetime-picker td.jump2today-cell span,
-        .datetime-picker td.next-year-cell span,
-        .datetime-picker td.previous-year-cell span,
-        .datetime-picker td.next-month-cell span,
-        .datetime-picker td.previous-month-cell span {
+        .datetime-picker td.date-cell span {
             cursor: pointer;
             display: inline-block;
         }
         .datetime-picker td.submit-cell span:hover,
         .datetime-picker td.reset-cell span:hover,
         .datetime-picker td.set2now-cell span:hover,
-        .datetime-picker td.date-cell span:hover,
-        .datetime-picker td.jump2today-cell span:hover,
-        .datetime-picker td.next-year-cell span:hover,
-        .datetime-picker td.previous-year-cell span:hover,
-        .datetime-picker td.next-month-cell span:hover,
-        .datetime-picker td.previous-month-cell span:hover {
+        .datetime-picker td.date-cell span:hover {
             background: #eee;
         }
         .datetime-picker {
@@ -167,12 +157,10 @@
         <label for="date">Choose date:</label>
         <input type="text" name="date" id="date">
     </form>
-    <table class="datetime-picker" id="datetime-picker"></table>
+    <div id="datetime-container"></div>
     <script src="datetime.js"></script>
     <script>
-        var startTime = new Date();
-
-        new DatetimePicker(
+        var datetimePicker = new DatetimePicker(
             new Date("2017/5/20 21:10:20"),
             {
                 "weekdays": ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
@@ -180,7 +168,6 @@
                 "onChange": function (current) {}
             }
         ).widget(
-            document.getElementById("datetime-picker"),
             {
                 "yearMonthBlock": {
                     "items": ["monthCell", "yearCell"]
@@ -210,7 +197,7 @@
             }
         );
 
-        console.log("Duration: " + (new Date() - startTime) + "ms");
+        document.getElementById("datetime-container").appendChild(datetimePicker);
     </script>
 </body>
 </html>

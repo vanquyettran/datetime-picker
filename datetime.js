@@ -142,20 +142,18 @@ DatetimePicker.prototype.renderItems = function (container, itemNames, itemsRefe
 
 /**
  *
- * @param container
  * @param options
- * @returns {DatetimePicker}
+ * @returns {Element}
  */
-DatetimePicker.prototype.widget = function (container, options) {
+DatetimePicker.prototype.widget = function (options) {
     var self = this;
-
-    if (!(container instanceof HTMLElement) || container.nodeName != "TABLE") {
-        throw TypeError("widget: \"container\" must be an table");
-    }
 
     if (typeof options != "object") {
         options = {};
     }
+
+    var picker = document.createElement("table");
+    picker.className = "datetime-picker";
 
     // Render view
     var itemsReference = {
@@ -177,10 +175,10 @@ DatetimePicker.prototype.widget = function (container, options) {
         container.appendChild(tr);
     };
 
-    this.renderItems(container, options.items, itemsReference, renderItem);
+    this.renderItems(picker, options.items, itemsReference, renderItem);
 
     // return picker
-    return this;
+    return picker;
 };
 
 /**
