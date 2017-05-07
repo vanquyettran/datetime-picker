@@ -103,6 +103,43 @@ var DatetimePicker = function (initTime, options) {
     }
 };
 
+DatetimePicker.prototype.renderItems = function (container, items, itemsReference, renderItem) {
+    if (!(container instanceof HTMLElement)) {
+        throw TypeError("renderItems: \"container\" must be an HTMLElement");
+    }
+    if (!(items instanceof Array)) {
+        throw TypeError("renderItems: \"items\" must be an Array");
+    }
+
+    if (typeof itemsReference != "object") {
+        throw TypeError("renderItems: \"itemsReference\" must be an Object");
+    }
+    if (typeof renderItem != "function") {
+        throw TypeError("renderItems: \"render\" must be an Function");
+    }
+
+    var viewItems = [];
+
+    items.forEach(function (itemName) {
+        if (itemsReference.hasOwnProperty(itemName)) {
+            viewItems.push(itemsReference[itemName]);
+        }
+    });
+
+    if (viewItems.length == 0) {
+        var itemName;
+        for (itemName in itemsReference) {
+            if (itemsReference.hasOwnProperty(itemName)) {
+                viewItems.push(itemsReference[itemName])
+            }
+        }
+    }
+
+    viewItems.forEach(function (viewItem) {
+        renderItem(container, viewItem);
+    });
+};
+
 /**
  *
  * @param container
@@ -122,19 +159,26 @@ DatetimePicker.prototype.widget = function (container, options) {
         options = {};
     }
 
-    var tr, td;
-    [
-        self.yearMonthBlock(options.yearMonthBlock),
-        self.dateBlock(options.dateBlock),
-        self.timeBlock(options.timeBlock),
-        self.controlBlock(options.controlBlock)
-    ].forEach(function (block) {
-        tr = document.createElement("tr");
-        container.appendChild(tr);
-        td = document.createElement("td");
+    var itemsReference = {
+        "yearMonthBlock": self.yearMonthBlock(options.yearMonthBlock),
+        "dateBlock": self.dateBlock(options.dateBlock),
+        "timeBlock": self.timeBlock(options.timeBlock),
+        "controlBlock": self.controlBlock(options.controlBlock)
+    };
+
+    if (!(options.items instanceof Array)) {
+        options.items = [];
+    }
+
+    var renderItem = function (container, viewItem) {
+        var tr = document.createElement("tr");
+        var td = document.createElement("td");
         tr.appendChild(td);
-        td.appendChild(block);
-    });
+        td.appendChild(viewItem);
+        container.appendChild(tr);
+    };
+
+    this.renderItems(container, options.items, itemsReference, renderItem);
 
     return this;
 };
@@ -521,13 +565,13 @@ DatetimePicker.prototype.controlBlock = function (options) {
     var row = document.createElement("tr");
     controlBlock.appendChild(row);
 
-    var presentCell = document.createElement("td");
-    presentCell.className = "present-cell";
+    var set2nowCell = document.createElement("td");
+    set2nowCell.className = "set2now-cell";
 
-    var presentSpan = document.createElement("span");
-    presentCell.appendChild(presentSpan);
+    var set2nowSpan = document.createElement("span");
+    set2nowCell.appendChild(set2nowSpan);
 
-    presentSpan.addEventListener("click", function () {
+    set2nowSpan.addEventListener("click", function () {
         var now = new Date();
         self.currentTime.year = now.getFullYear();
         self.currentTime.month = now.getMonth();
@@ -564,10 +608,21 @@ DatetimePicker.prototype.controlBlock = function (options) {
         }
     });
 
-    row.appendChild(resetCell);
-    row.appendChild(presentCell);
-    row.appendChild(submitCell);
+    var itemsReference = {
+        "set2nowCell": set2nowCell,
+        "resetCell": resetCell,
+        "submitCell": submitCell
+    };
 
+    if (!(options.items instanceof Array)) {
+        options.items = [];
+    }
+
+    var renderItem = function (container, viewItem) {
+        container.appendChild(viewItem);
+    };
+
+    this.renderItems(row, options.items, itemsReference, renderItem);
 
     return controlBlock;
 };

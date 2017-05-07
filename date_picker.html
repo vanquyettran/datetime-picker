@@ -33,7 +33,7 @@
         }
         .datetime-picker td.submit-cell span,
         .datetime-picker td.reset-cell span,
-        .datetime-picker td.present-cell span,
+        .datetime-picker td.set2now-cell span,
         .datetime-picker td.date-cell span,
         .datetime-picker td.jump2today-cell span,
         .datetime-picker td.next-year-cell span,
@@ -45,7 +45,7 @@
         }
         .datetime-picker td.submit-cell span:hover,
         .datetime-picker td.reset-cell span:hover,
-        .datetime-picker td.present-cell span:hover,
+        .datetime-picker td.set2now-cell span:hover,
         .datetime-picker td.date-cell span:hover,
         .datetime-picker td.jump2today-cell span:hover,
         .datetime-picker td.next-year-cell span:hover,
@@ -79,7 +79,7 @@
         }
         .datetime-picker .submit-cell span:before,
         .datetime-picker .reset-cell span:before,
-        .datetime-picker .present-cell span:before {
+        .datetime-picker .set2now-cell span:before {
             content: "Hiện tại";
             color: #aaa;
             font-size: 0.8em;
@@ -175,7 +175,7 @@
             /*letter-spacing: 0.5em;*/
         }
         .datetime-picker .weekday-cell span,
-        .datetime-picker .present-cell span,
+        .datetime-picker .set2now-cell span,
         .datetime-picker .reset-cell span,
         .datetime-picker .submit-cell span,
         .datetime-picker .date-cell span {
@@ -194,7 +194,7 @@
         <label for="date">Choose date:</label>
         <input type="text" name="date" id="date">
     </form>
-    <table class="datetime-picker" id="date_picker"></table>
+    <table class="datetime-picker" id="datetime-picker"></table>
     <script src="datetime.js"></script>
     <script>
         var startTime = new Date();
@@ -202,41 +202,25 @@
         new DatetimePicker(
             new Date("2017/5/20 21:10:20"),
             {
-                "weekdays": [
-                    "CN",
-                    "T2",
-                    "T3",
-                    "T4",
-                    "T5",
-                    "T6",
-                    "T7"
-                ],
-                "months": [
-                    "Giêng",
-                    "Hai",
-                    "Ba",
-                    "Tư",
-                    "Năm",
-                    "Sáu",
-                    "Bảy",
-                    "Tám",
-                    "Chín",
-                    "Mười",
-                    "Mười Một",
-                    "Mười Hai"
-                ],
-                "onChange": function (current) {
-                }
+                "weekdays": ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+                "months": ["Giêng", "Hai", "Ba", "Tư", "Năm", "Sáu", "Bảy", "Tám", "Chín", "Mười", "Mười Một", "Mười Hai"],
+                "onChange": function (current) {}
             }
         ).widget(
-            document.getElementById("date_picker"),
+            document.getElementById("datetime-picker"),
             {
+                "yearMonthBlock": {
+                    "items": ["yearCell", "monthCell"]
+                },
                 "dateBlock": {
                     "extendedWeeks": {"before": 0, "after": 0},
-                    "onClick": function (current) {
-                    }
+                    "onClick": function (current) {}
+                },
+                "timeBlock": {
+                    "items": ["hoursCell", "minutesCell", "secondsCell"]
                 },
                 "controlBlock": {
+                    "items": ["set2nowCell", "resetCell", "submitCell"],
                     "onSubmit": function (current) {
                         document.getElementById("date").value
                                 = "Y/m/d H:i:s"
@@ -248,7 +232,8 @@
                                 .replace(/s/g, current.seconds)
                         ;
                     }
-                }
+                },
+                "items": ["yearMonthBlock", "dateBlock", "timeBlock", "controlBlock"]
             }
         );
 
