@@ -103,11 +103,11 @@ var DatetimePicker = function (initTime, options) {
     }
 };
 
-DatetimePicker.prototype.renderItems = function (container, items, itemsReference, renderItem) {
+DatetimePicker.prototype.renderItems = function (container, itemNames, itemsReference, renderItem) {
     if (!(container instanceof HTMLElement)) {
         throw TypeError("renderItems: \"container\" must be an HTMLElement");
     }
-    if (!(items instanceof Array)) {
+    if (!(itemNames instanceof Array)) {
         throw TypeError("renderItems: \"items\" must be an Array");
     }
 
@@ -120,7 +120,7 @@ DatetimePicker.prototype.renderItems = function (container, items, itemsReferenc
 
     var viewItems = [];
 
-    items.forEach(function (itemName) {
+    itemNames.forEach(function (itemName) {
         if (itemsReference.hasOwnProperty(itemName)) {
             viewItems.push(itemsReference[itemName]);
         }
@@ -159,6 +159,7 @@ DatetimePicker.prototype.widget = function (container, options) {
         options = {};
     }
 
+    // Render view
     var itemsReference = {
         "yearMonthBlock": self.yearMonthBlock(options.yearMonthBlock),
         "dateBlock": self.dateBlock(options.dateBlock),
@@ -180,6 +181,7 @@ DatetimePicker.prototype.widget = function (container, options) {
 
     this.renderItems(container, options.items, itemsReference, renderItem);
 
+    // return picker
     return this;
 };
 
@@ -198,67 +200,72 @@ DatetimePicker.prototype.yearMonthBlock = function (options) {
     var yearMonthBlock = document.createElement("table");
     yearMonthBlock.className = "year-month-block";
 
-    // Act row
-    var actRow;
-    var actCell;
-    var actSpan;
-    var changes;
-    ["increase", "decrease"].forEach(function (act) {
-        actRow = document.createElement("tr");
-        actRow.className = act + "-row";
-        yearMonthBlock.appendChild(actRow);
-        ["year", "month"].forEach(function (unit) {
-            actCell = document.createElement("td");
-            if (unit == "year") {
-                changes = [100, 10, 1];
-            } else {
-                changes = [1];
-            }
-            actCell.className = act + "-cell";
-            actRow.appendChild(actCell);
-            changes.forEach(function (change) {
-                actSpan = document.createElement("span");
-                actCell.appendChild(actSpan);
+    var yearMonthRow = document.createElement("tr");
+    yearMonthRow.className = "year-month-row";
+    yearMonthBlock.appendChild(yearMonthRow);
+
+    var yearCell = document.createElement("td");
+    yearCell.className = "year-cell";
+    yearCell.unit = "year";
+    yearCell.actionChanges = [100, 10, 1];
+    yearCell.valueSpan = document.createElement("span");
+
+    var monthCell = document.createElement("td");
+    monthCell.className = "month-cell";
+    monthCell.unit = "month";
+    monthCell.actionChanges = [1];
+    monthCell.valueSpan = document.createElement("span");
+
+    [yearCell, monthCell].forEach(function (block) {
+        ["increase", "decrease"].forEach(function (action) {
+            var actRow = document.createElement("div");
+            actRow.className = action + "-div";
+            block.appendChild(actRow);
+            block.actionChanges.forEach(function (change) {
+                var actSpan = document.createElement("span");
+                actRow.appendChild(actSpan);
                 actSpan.setAttribute("data-change", change);
-                actSpan.setAttribute("data-unit", unit);
+                actSpan.setAttribute("data-unit", block.unit);
                 actSpan.addEventListener("click", function (event) {
-                    if (act == "increase") {
-                        self.currentTime[unit] += change;
+                    if (action == "increase") {
+                        self.currentTime[block.unit] += change;
                     } else {
-                        self.currentTime[unit] -= change;
+                        self.currentTime[block.unit] -= change;
                     }
                 });
             });
         });
+        var valueDiv = document.createElement("div");
+        valueDiv.className = "value-div";
+        valueDiv.appendChild(block.valueSpan);
+        block.insertBefore(valueDiv, block.children[1]);
     });
 
-    // Year-month row
-    var yearMonthRow = document.createElement("tr");
-    yearMonthRow.className = "year-month-row";
-    yearMonthBlock.insertBefore(yearMonthRow, yearMonthBlock.children[1]);
-
-    var yearCell = document.createElement("td");
-    yearCell.className = "year-cell";
-    yearMonthRow.appendChild(yearCell);
-
-    var yearSpan = document.createElement("span");
-    yearCell.appendChild(yearSpan);
-
-    var monthCell = document.createElement("td");
-    monthCell.className = "month-cell";
-    yearMonthRow.appendChild(monthCell);
-
-    var monthSpan = document.createElement("span");
-    monthCell.appendChild(monthSpan);
-
     function printYearMonth() {
-        yearSpan.innerHTML = self.currentTime.year;
-        monthSpan.innerHTML = self.options.months[self.currentTime.month];
+        yearCell.valueSpan.innerHTML = self.currentTime.year;
+        monthCell.valueSpan.innerHTML = self.options.months[self.currentTime.month];
     }
 
     printYearMonth();
     self.currentTime.addEventListeners("change", printYearMonth);
 
+    // Render view
+    var itemsReference = {
+        "yearCell": yearCell,
+        "monthCell": monthCell
+    };
+
+    if (!(options.items instanceof Array)) {
+        options.items = [];
+    }
+
+    var renderItem = function (container, viewItem) {
+        container.appendChild(viewItem);
+    };
+
+    this.renderItems(yearMonthRow, options.items, itemsReference, renderItem);
+
+    // Return block
     return yearMonthBlock;
 };
 
@@ -365,7 +372,8 @@ DatetimePicker.prototype.dateBlock = function (options) {
             if (theMonth.monthPos == 0 && self.currentTime.date > lastDayOfMonth) {
                 self.currentTime.date = lastDayOfMonth;
             }
-            for (var date = 1; date <= lastDayOfMonth; date++) {
+            var date;
+            for (date = 1; date <= lastDayOfMonth; date++) {
                 calendar.push({
                     "year": theMonth.year,
                     "month": theMonth.month,
@@ -478,6 +486,7 @@ DatetimePicker.prototype.timeBlock = function (options) {
     var timeBlock = document.createElement("table");
     timeBlock.className = "time-block";
 
+    /*
     var actRow;
     var actCell;
     var actSpan;
@@ -534,16 +543,82 @@ DatetimePicker.prototype.timeBlock = function (options) {
 
     var secondsSpan = document.createElement("span");
     secondsCell.appendChild(secondsSpan);
+    */
+
+    var timeRow = document.createElement("tr");
+    timeRow.className = "time-row";
+    timeBlock.appendChild(timeRow);
+
+    var hoursCell = document.createElement("td");
+    hoursCell.className = "hours-cell";
+    hoursCell.unit = "hours";
+    hoursCell.actionChanges = [10, 1];
+    hoursCell.valueSpan = document.createElement("span");
+    
+    var minutesCell = document.createElement("td");
+    minutesCell.className = "minutes-cell";
+    minutesCell.unit = "minutes";
+    minutesCell.actionChanges = [10, 1];
+    minutesCell.valueSpan = document.createElement("span");
+    
+    var secondsCell = document.createElement("td");
+    secondsCell.className = "seconds-cell";
+    secondsCell.unit = "seconds";
+    secondsCell.actionChanges = [10, 1];
+    secondsCell.valueSpan = document.createElement("span");
+    
+    [hoursCell, minutesCell, secondsCell].forEach(function (block) {
+        ["increase", "decrease"].forEach(function (action) {
+            var actRow = document.createElement("div");
+            actRow.className = action + "-div";
+            block.appendChild(actRow);
+            block.actionChanges.forEach(function (change) {
+                var actSpan = document.createElement("span");
+                actRow.appendChild(actSpan);
+                actSpan.setAttribute("data-change", change);
+                actSpan.setAttribute("data-unit", block.unit);
+                actSpan.addEventListener("click", function (event) {
+                    if (action == "increase") {
+                        self.currentTime[block.unit] += change;
+                    } else {
+                        self.currentTime[block.unit] -= change;
+                    }
+                });
+            });
+        });
+        var valueDiv = document.createElement("div");
+        valueDiv.className = "value-div";
+        valueDiv.appendChild(block.valueSpan);
+        block.insertBefore(valueDiv, block.children[1]);
+    });
 
     function printTime() {
-        hoursSpan.innerHTML = self.currentTime.hours;
-        minutesSpan.innerHTML = self.currentTime.minutes;
-        secondsSpan.innerHTML = self.currentTime.seconds;
+        hoursCell.valueSpan.innerHTML = self.currentTime.hours;
+        minutesCell.valueSpan.innerHTML = self.currentTime.minutes;
+        secondsCell.valueSpan.innerHTML = self.currentTime.seconds;
     }
 
     printTime();
     self.currentTime.addEventListeners("change", printTime);
 
+    // Render view
+    var itemsReference = {
+        "hoursCell": hoursCell,
+        "minutesCell": minutesCell,
+        "secondsCell": secondsCell
+    };
+
+    if (!(options.items instanceof Array)) {
+        options.items = [];
+    }
+
+    var renderItem = function (container, viewItem) {
+        container.appendChild(viewItem);
+    };
+
+    this.renderItems(timeRow, options.items, itemsReference, renderItem);
+
+    // Return block
     return timeBlock;
 };
 
@@ -608,6 +683,7 @@ DatetimePicker.prototype.controlBlock = function (options) {
         }
     });
 
+    // Render view
     var itemsReference = {
         "set2nowCell": set2nowCell,
         "resetCell": resetCell,
@@ -624,5 +700,6 @@ DatetimePicker.prototype.controlBlock = function (options) {
 
     this.renderItems(row, options.items, itemsReference, renderItem);
 
+    // Return block
     return controlBlock;
 };

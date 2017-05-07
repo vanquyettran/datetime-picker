@@ -93,31 +93,31 @@
             content: "Xong";
             color: #06c;
         }
-        .datetime-picker .increase-cell span,
-        .datetime-picker .decrease-cell span {
+        .datetime-picker .increase-div span,
+        .datetime-picker .decrease-div span {
             width: 1.5em;
             height: 1.2em;
             /*line-height: 1em;*/
             /*vertical-align: baseline;*/
             /*text-align: center;*/
         }
-        .datetime-picker .increase-cell span {
+        .datetime-picker .increase-div span {
             vertical-align: bottom;
         }
-        .datetime-picker .decrease-cell span {
+        .datetime-picker .decrease-div span {
             vertical-align: top;
         }
-        .datetime-picker .increase-cell span:hover,
-        .datetime-picker .decrease-cell span:hover {
+        .datetime-picker .increase-div span:hover,
+        .datetime-picker .decrease-div span:hover {
             background: #eee;
         }
-        .datetime-picker .increase-cell span:before,
-        .datetime-picker .decrease-cell span:before {
+        .datetime-picker .increase-div span:before,
+        .datetime-picker .decrease-div span:before {
             color: #aaa;
             font-size: 0.8em;
         }
-        .datetime-picker .increase-cell span:before,
-        .datetime-picker .decrease-cell span:before {
+        .datetime-picker .increase-div span:before,
+        .datetime-picker .decrease-div span:before {
             content: "";
             display: block;
             width: 100%;
@@ -126,10 +126,10 @@
             background-repeat: no-repeat;
             background-size: 30%;
         }
-        .datetime-picker .increase-cell span:before {
+        .datetime-picker .increase-div span:before {
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http:%2F%2Fwww.w3.org%2F2000%2Fsvg" width="452" height="452" viewBox="0 0 451.8 451.8"><path fill="%2368b" d="M248.3 106.4l194.3 194.3c12.4 12.4 12.4 32.4 0 44.7 -12.4 12.4-32.4 12.4-44.7 0L225.9 173.5 54 345.4c-12.4 12.4-32.4 12.4-44.7 0 -12.4-12.4-12.4-32.4 0-44.7L203.6 106.4c6.2-6.2 14.3-9.3 22.4-9.3C234 97.1 242.1 100.2 248.3 106.4z"%2F><%2Fsvg>');
         }
-        .datetime-picker .decrease-cell span:before {
+        .datetime-picker .decrease-div span:before {
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http:%2F%2Fwww.w3.org%2F2000%2Fsvg" width="452" height="452" viewBox="0 0 451.8 451.8"><path fill="%23b86" d="M225.9 354.7c-8.1 0-16.2-3.1-22.4-9.3L9.3 151.2c-12.4-12.4-12.4-32.4 0-44.8 12.4-12.4 32.4-12.4 44.7 0l171.9 171.9 171.9-171.9c12.4-12.4 32.4-12.4 44.7 0 12.4 12.4 12.4 32.4 0 44.8L248.3 345.4C242.1 351.6 234 354.7 225.9 354.7z"%2F><%2Fsvg>');
         }
 
@@ -141,28 +141,28 @@
             color: #666;
             font-size: 0.9em;
         }
-        .datetime-picker .hours-cell span:after {
+        .datetime-picker .hours-cell .value-div span:after {
             content: " giờ";
         }
-        .datetime-picker .minutes-cell span:after {
+        .datetime-picker .minutes-cell .value-div span:after {
             content: " phút";
         }
-        .datetime-picker .seconds-cell span:after {
+        .datetime-picker .seconds-cell .value-div span:after {
             content: " giây";
         }
         .datetime-picker .date-block tr:last-child td {
             /*border-bottom: 1px solid #eee;*/
         }
-        .datetime-picker .year-cell span {
+        .datetime-picker .year-cell .value-div span {
             /*letter-spacing: 0.1em;*/
         }
-        .datetime-picker .year-cell span:before {
+        .datetime-picker .year-cell .value-div span:before {
             content: "Năm ";
             font-size: 0.9em;
         }
-        .datetime-picker .month-cell {
+        .datetime-picker .month-cell .value-div {
         }
-        .datetime-picker .month-cell span:before {
+        .datetime-picker .month-cell .value-div span:before {
             content: "Tháng ";
             font-size: 0.9em;
         }
@@ -170,8 +170,8 @@
             /*padding-top: 0.1em;*/
             /*padding-bottom: 0.1em;*/
         }
-        .datetime-picker .increase-cell,
-        .datetime-picker .decrease-cell {
+        .datetime-picker .increase-div,
+        .datetime-picker .decrease-div {
             /*letter-spacing: 0.5em;*/
         }
         .datetime-picker .weekday-cell span,
@@ -210,7 +210,7 @@
             document.getElementById("datetime-picker"),
             {
                 "yearMonthBlock": {
-                    "items": ["yearCell", "monthCell"]
+                    "items": ["monthCell", "yearCell"]
                 },
                 "dateBlock": {
                     "extendedWeeks": {"before": 0, "after": 0},
