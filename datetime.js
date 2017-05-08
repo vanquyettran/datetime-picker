@@ -7,6 +7,10 @@ var DatetimePicker = function (initTime, options) {
 
     this.initTime = initTime;
 
+    if (!(initTime instanceof Date)) {
+        initTime = new Date();
+    }
+
     this.options = options;
 
     if (typeof options != "object") {
@@ -20,21 +24,19 @@ var DatetimePicker = function (initTime, options) {
         }
     }
 
-    if (!(initTime instanceof Date)) {
-        initTime = new Date();
-    }
+    this.current = {
+        _time: new Date(),
 
-    this.currentTime = {
-        time: new Date(),
+        // Event listeners
         eventListeners: {
             "change": []
         },
-        addEventListeners: function (event, func) {
+        addEventListener: function (event, func) {
             if (this.eventListeners[event]) {
                 this.eventListeners[event].push(func);
             }
         },
-        callEventListeners: function (event) {
+        callEventListener: function (event) {
             if (this.eventListeners[event]) {
                 this.eventListeners[event].forEach(function (func) {
                     func();
@@ -43,6 +45,9 @@ var DatetimePicker = function (initTime, options) {
         },
 
         // Getter
+        get time() {
+            return this._time;
+        },
         get year() {
             return this.time.getFullYear();
         },
@@ -63,603 +68,575 @@ var DatetimePicker = function (initTime, options) {
         },
 
         // Setter
+        set time(value) {
+            this.time.setTime(value);
+            this.callEventListener("change");
+        },
         set year(value) {
             this.time.setFullYear(value);
-            this.callEventListeners("change");
+            this.callEventListener("change");
         },
         set month(value) {
             this.time.setMonth(value);
-            this.callEventListeners("change");
+            this.callEventListener("change");
         },
         set date(value) {
             this.time.setDate(value);
-            this.callEventListeners("change");
+            this.callEventListener("change");
         },
         set hours(value) {
             this.time.setHours(value);
-            this.callEventListeners("change");
+            this.callEventListener("change");
         },
         set minutes(value) {
             this.time.setMinutes(value);
-            this.callEventListeners("change");
+            this.callEventListener("change");
         },
         set seconds(value) {
             this.time.setSeconds(value);
-            this.callEventListeners("change");
+            this.callEventListener("change");
         }
     };
 
-    this.currentTime.year = initTime.getFullYear();
-    this.currentTime.month = initTime.getMonth();
-    this.currentTime.date = initTime.getDate();
-    this.currentTime.hours = initTime.getHours();
-    this.currentTime.minutes = initTime.getMinutes();
-    this.currentTime.seconds = initTime.getSeconds();
+    this.current.time = this.initTime.getTime();
 
     if (typeof options.onChange == "function") {
-        this.currentTime.addEventListeners("change", function () {
-            options.onChange(self.currentTime);
+        this.current.addEventListener("change", function () {
+            options.onChange(self.current);
         });
     }
 };
 
-/**
- *
- * @param className
- * @returns {string}
- */
-DatetimePicker.prototype.newClassName = function (className) {
-    var prefix = "datetimePicker__";
-    if (typeof this.options.classNamePrefix == "string") {
-        prefix = this.options.classNamePrefix;
-    }
-    return prefix + className;
-};
+!function (document) {
+    /**
+     *
+     * @param className
+     * @returns {string}
+     */
+    var createClassName = function (className) {
+        var prefix = "datetimePicker__";
+        // if (typeof DatetimePicker.options.classNamePrefix == "string") {
+        //     prefix = DatetimePicker.options.classNamePrefix;
+        // }
+        return prefix + className;
+    };
 
-/**
- *
- * @param container
- * @param itemNames
- * @param itemsReference
- * @param renderItem
- */
-DatetimePicker.prototype.renderItems = function (container, itemNames, itemsReference, renderItem) {
-    if (!(container instanceof HTMLElement)) {
-        throw TypeError("renderItems: \"container\" must be an HTMLElement");
-    }
-    if (!(itemNames instanceof Array)) {
-        throw TypeError("renderItems: \"itemNames\" must be an Array");
-    }
-
-    if (typeof itemsReference != "object") {
-        throw TypeError("renderItems: \"itemsReference\" must be an Object");
-    }
-    if (typeof renderItem != "function") {
-        throw TypeError("renderItems: \"render\" must be an Function");
-    }
-
-    var viewItems = [];
-
-    itemNames.forEach(function (itemName) {
-        if (itemsReference.hasOwnProperty(itemName)) {
-            viewItems.push(itemsReference[itemName]);
+    /**
+     *
+     * @param container
+     * @param itemNames
+     * @param itemsReference
+     * @param renderItem
+     */
+    var renderItems = function (container, itemNames, itemsReference, renderItem) {
+        /*
+        if (!(container instanceof HTMLElement)) {
+            throw TypeError("renderItems: \"container\" must be an HTMLElement");
         }
-    });
+        if (!(itemNames instanceof Array)) {
+            throw TypeError("renderItems: \"itemNames\" must be an Array");
+        }
 
-    if (viewItems.length == 0) {
-        var itemName;
-        for (itemName in itemsReference) {
+        if (typeof itemsReference != "object") {
+            throw TypeError("renderItems: \"itemsReference\" must be an Object");
+        }
+        if (typeof renderItem != "function") {
+            throw TypeError("renderItems: \"render\" must be an Function");
+        }
+        */
+
+        var viewItems = [];
+
+        itemNames.forEach(function (itemName) {
             if (itemsReference.hasOwnProperty(itemName)) {
-                viewItems.push(itemsReference[itemName])
+                viewItems.push(itemsReference[itemName]);
+            }
+        });
+
+        if (viewItems.length == 0) {
+            var itemName;
+            for (itemName in itemsReference) {
+                if (itemsReference.hasOwnProperty(itemName)) {
+                    viewItems.push(itemsReference[itemName])
+                }
             }
         }
-    }
 
-    viewItems.forEach(function (viewItem) {
-        renderItem(container, viewItem);
-    });
-};
-
-/**
- *
- * @param options
- * @returns {Element}
- */
-DatetimePicker.prototype.widget = function (options) {
-    var self = this;
-
-    if (typeof options != "object") {
-        options = {};
-    }
-
-    var picker = document.createElement("table");
-    picker.className = this.newClassName("widget");
-
-    // Render view
-    var itemsReference = {
-        "yearMonthBlock": self.yearMonthBlock(options.yearMonthBlock),
-        "dateBlock": self.dateBlock(options.dateBlock),
-        "timeBlock": self.timeBlock(options.timeBlock),
-        "controlBlock": self.controlBlock(options.controlBlock)
-    };
-
-    if (!(options.items instanceof Array)) {
-        options.items = [];
-    }
-
-    var renderItem = function (container, viewItem) {
-        var tr = document.createElement("tr");
-        var td = document.createElement("td");
-        tr.appendChild(td);
-        td.appendChild(viewItem);
-        container.appendChild(tr);
-    };
-
-    this.renderItems(picker, options.items, itemsReference, renderItem);
-
-    // return picker
-    return picker;
-};
-
-/**
- *
- * @param options
- * @returns {Element}
- */
-DatetimePicker.prototype.yearMonthBlock = function (options) {
-    var self = this;
-
-    if (typeof options != "object") {
-        options = {};
-    }
-
-    var yearMonthBlock = document.createElement("table");
-    yearMonthBlock.className = this.newClassName("year-month-block");
-
-    var yearMonthRow = document.createElement("tr");
-    yearMonthRow.className = this.newClassName("year-month-row");
-    yearMonthBlock.appendChild(yearMonthRow);
-
-    var yearCell = document.createElement("td");
-    yearCell.className = this.newClassName("year-cell");
-    yearCell.unit = "year";
-    yearCell.actionChanges = [100, 10, 1];
-    yearCell.valueSpan = document.createElement("span");
-
-    var monthCell = document.createElement("td");
-    monthCell.className = this.newClassName("month-cell");
-    monthCell.unit = "month";
-    monthCell.actionChanges = [1];
-    monthCell.valueSpan = document.createElement("span");
-
-    [yearCell, monthCell].forEach(function (block) {
-        ["increase", "decrease"].forEach(function (action) {
-            var actRow = document.createElement("div");
-            actRow.className = self.newClassName(action + "-div");
-            block.appendChild(actRow);
-            block.actionChanges.forEach(function (change) {
-                var actSpan = document.createElement("span");
-                actRow.appendChild(actSpan);
-                actSpan.setAttribute("data-action", action);
-                actSpan.setAttribute("data-change", change);
-                actSpan.setAttribute("data-unit", block.unit);
-                actSpan.addEventListener("click", function (event) {
-                    if (action == "increase") {
-                        self.currentTime[block.unit] += change;
-                    } else {
-                        self.currentTime[block.unit] -= change;
-                    }
-                });
-            });
+        viewItems.forEach(function (viewItem) {
+            renderItem(container, viewItem);
         });
-        var valueDiv = document.createElement("div");
-        valueDiv.className = self.newClassName("value-div");
-        valueDiv.appendChild(block.valueSpan);
-        block.insertBefore(valueDiv, block.children[1]);
-    });
-
-    function printYearMonth() {
-        yearCell.valueSpan.innerHTML = self.currentTime.year;
-        monthCell.valueSpan.innerHTML = self.options.months[self.currentTime.month];
-    }
-
-    printYearMonth();
-    self.currentTime.addEventListeners("change", printYearMonth);
-
-    // Render view
-    var itemsReference = {
-        "yearCell": yearCell,
-        "monthCell": monthCell
     };
 
-    if (!(options.items instanceof Array)) {
-        options.items = [];
-    }
-
-    var renderItem = function (container, viewItem) {
-        container.appendChild(viewItem);
-    };
-
-    this.renderItems(yearMonthRow, options.items, itemsReference, renderItem);
-
-    // Return block
-    return yearMonthBlock;
-};
-
-/**
- *
- * @param options
- * @returns {Element}
- */
-DatetimePicker.prototype.dateBlock = function (options) {
-    var self = this;
-
-    if (typeof options != "object") {
-        options = {};
-    }
-
-    if (typeof options.extendedWeeks != "object") {
-        options.extendedWeeks = {"before": 0, "after": 0};
-    } else {
-        options.extendedWeeks.before = parseInt(options.extendedWeeks.before) || 0;
-        options.extendedWeeks.after = parseInt(options.extendedWeeks.after) || 0;
-        if (options.extendedWeeks.before > 3
-            || options.extendedWeeks.before < 0
-            || options.extendedWeeks.after > 3
-            || options.extendedWeeks.after < 0
-        ) {
-            throw Error("dateBlock: \"options.extendedWeeks.before/after\" must be in range [0, 3]");
-        }
-    }
-
-    // Date block
-    var dateBlock = document.createElement("table");
-    dateBlock.className = this.newClassName("date-block");
-
-    var weekdayRow = document.createElement("tr");
-    weekdayRow.className = this.newClassName("weekday-row");
-    dateBlock.appendChild(weekdayRow);
-
-    var weekdayCell;
-    var weekdaySpan;
-    for (var i = 0; i < 7; i++) {
-        weekdayCell = document.createElement("td");
-        weekdayCell.className = this.newClassName("weekday-cell");
-        weekdayRow.appendChild(weekdayCell);
-
-        weekdaySpan = document.createElement("span");
-        weekdaySpan.innerHTML = self.options.weekdays[i];
-        weekdayCell.appendChild(weekdaySpan);
-    }
-
-    function printDate() {
-        // Empty calendar block without first row
-        while (dateBlock.children[1]) {
-            dateBlock.removeChild(dateBlock.children[1]);
-        }
+    /**
+     *
+     * @param currentYear
+     * @param currentMonth
+     * @param currentDate
+     * @returns {Array}
+     */
+    var createCalendar = function (currentYear, currentMonth, currentDate) {
+        var calendar = [];
 
         var now = new Date();
 
-        var calendar = [];
+        var threeMonths = [[currentYear, currentMonth]];
 
-        var threeMonths = [{
-            "year": self.currentTime.year,
-            "month": self.currentTime.month,
-            "monthPos": 0
-        }];
-
-        if (self.currentTime.month == 0) {
-            threeMonths.unshift({
-                "year": self.currentTime.year - 1,
-                "month": 11,
-                "monthPos": -1
-            });
-            threeMonths.push({
-                "year": self.currentTime.year,
-                "month": 1,
-                "monthPos": 1
-            });
-
-        } else if (self.currentTime.month == 11) {
-            threeMonths.unshift({
-                "year": self.currentTime.year,
-                "month": 10,
-                "monthPos": -1
-            });
-            threeMonths.push({
-                "year": self.currentTime.year + 1,
-                "month": 0,
-                "monthPos": 1
-            });
+        if (currentMonth == 0) {
+            threeMonths.unshift([currentYear - 1, 11]);
+            threeMonths.push([currentYear, 1]);
+        } else if (currentMonth == 11) {
+            threeMonths.unshift([currentYear, 10]);
+            threeMonths.push([currentYear + 1, 0]);
         } else {
-            threeMonths.unshift({
-                "year": self.currentTime.year,
-                "month": self.currentTime.month - 1,
-                "monthPos": -1
-            });
-            threeMonths.push({
-                "year": self.currentTime.year,
-                "month": self.currentTime.month + 1,
-                "monthPos": 1
-            });
+            threeMonths.unshift([currentYear, currentMonth - 1]);
+            threeMonths.push([currentYear, currentMonth + 1]);
         }
 
-        threeMonths.forEach(function (theMonth) {
-            var lastDayOfMonth = new Date(theMonth.year, theMonth.month + 1, 0).getDate(); // date "zero" of next month
-            if (theMonth.monthPos == 0 && self.currentTime.date > lastDayOfMonth) {
-                self.currentTime.date = lastDayOfMonth;
-            }
-            var date;
-            for (date = 1; date <= lastDayOfMonth; date++) {
+        threeMonths.forEach(function (theMonth, index) {
+            var date, monthPos;
+            var maxDate = new Date(theMonth[0], theMonth[1] + 1, 0).getDate(); // date "zero" of next month
+            for (date = 1; date <= maxDate; date++) {
+                monthPos = index - 1; // index == 1, 2 or 3
                 calendar.push({
-                    "year": theMonth.year,
-                    "month": theMonth.month,
+                    "year": theMonth[0],
+                    "month": theMonth[1],
                     "date": date,
-                    "day": new Date(theMonth.year, theMonth.month, date).getDay(),
-                    "monthPos": theMonth.monthPos,
+                    "day": new Date(theMonth[0], theMonth[1], date).getDay(),
+                    "monthPos": monthPos,
                     "datePos":
-                        theMonth.monthPos != 0
-                            ? theMonth.monthPos
-                            : (date - self.currentTime.date) / Math.abs(date - self.currentTime.date) || 0,
+                        monthPos != 0
+                            ? monthPos
+                            : (date - currentDate) / Math.abs(date - currentDate) || 0,
                     "isToday":
-                        theMonth.year == now.getFullYear()
-                        && theMonth.month == now.getMonth()
+                        theMonth[0] == now.getFullYear()
+                        && theMonth[1] == now.getMonth()
                         && date == now.getDate()
                 });
             }
         });
 
-        var dateRow;
-        var dateCell;
-        var dateSpan;
+        return calendar;
+    };
 
-        for (var j = 0; j < calendar.length; j++) {
-            var item = calendar[j];
-            if (item.day == 0) { // Monday
-                if (item.monthPos == -1) {
-                    if (calendar[(j + 6) + 7 * options.extendedWeeks.before].monthPos == -1) {
-                        j += 6;
-                        continue;
-                    }
-                }
-                if (item.monthPos == 1) {
-                    if (calendar[j - 7 * options.extendedWeeks.after].monthPos == 1) {
-                        break;
-                    }
-                }
-                dateRow = document.createElement("tr");
-                dateRow.className = self.newClassName("date-row");
-                dateBlock.appendChild(dateRow);
-            }
-            if (dateRow) {
-                dateCell = document.createElement("td");
-                dateRow.appendChild(dateCell);
-                dateCell.className = self.newClassName("date-cell");
+    /**
+     *
+     * @param options
+     * @returns {Element}
+     */
+    DatetimePicker.prototype.widget = function (options) {
+        var self = this;
 
-                // Marks item is today
-                if (item.isToday) {
-                    dateCell.classList.add(self.newClassName("today"));
-                }
-
-                // Marks item is before/current/after month
-                if (item.monthPos == -1) {
-                    dateCell.classList.add(self.newClassName("before-month"));
-                } else if (item.monthPos == 1) {
-                    dateCell.classList.add(self.newClassName("after-month"));
-                } else {
-                    dateCell.classList.add(self.newClassName("current-month"));
-                }
-
-                // Marks item is before/current/after date
-                if (item.datePos == -1) {
-                    dateCell.classList.add(self.newClassName("before-date"));
-                } else if (item.datePos == 1) {
-                    dateCell.classList.add(self.newClassName("after-date"));
-                } else {
-                    dateCell.classList.add(self.newClassName("current-date"));
-                }
-
-                dateSpan = document.createElement("span");
-                dateCell.appendChild(dateSpan);
-
-                // Binds data year/month/date/day to each item
-                dateSpan.setAttribute("data-year", item.year);
-                dateSpan.setAttribute("data-month", item.month);
-                dateSpan.setAttribute("data-date", item.date);
-                dateSpan.setAttribute("data-day", item.day);
-
-                dateSpan.innerHTML = item.date;
-                dateSpan.addEventListener("click", function () {
-                    self.currentTime.date = this.getAttribute("data-date");
-                    self.currentTime.month = this.getAttribute("data-month");
-                    self.currentTime.year = this.getAttribute("data-year");
-
-                    if (typeof options.onClick == "function") {
-                        options.onClick(self.currentTime);
-                    }
-                });
-            }
+        if (typeof options != "object") {
+            options = {};
         }
-    }
 
-    printDate();
-    self.currentTime.addEventListeners("change", printDate);
+        var picker = document.createElement("table");
+        picker.className = createClassName("widget");
 
-    return dateBlock;
-};
+        // Render view
+        var itemsReference = {
+            "yearMonthBlock": self.yearMonthBlock(options.yearMonthBlock),
+            "dateBlock": self.dateBlock(options.dateBlock),
+            "timeBlock": self.timeBlock(options.timeBlock),
+            "controlBlock": self.controlBlock(options.controlBlock)
+        };
 
-/**
- *
- * @param options
- * @returns {Element}
- */
-DatetimePicker.prototype.timeBlock = function (options) {
-    var self = this;
+        if (!(options.items instanceof Array)) {
+            options.items = [];
+        }
 
-    if (typeof options != "object") {
-        options = {};
-    }
+        var renderItem = function (container, viewItem) {
+            var tr = document.createElement("tr");
+            var td = document.createElement("td");
+            tr.appendChild(td);
+            td.appendChild(viewItem);
+            container.appendChild(tr);
+        };
 
-    // Creates table for the calendar
-    var timeBlock = document.createElement("table");
-    timeBlock.className = this.newClassName("time-block");
+        renderItems(picker, options.items, itemsReference, renderItem);
 
-    var timeRow = document.createElement("tr");
-    timeRow.className = this.newClassName("time-row");
-    timeBlock.appendChild(timeRow);
+        // return picker
+        return picker;
+    };
 
-    var hoursCell = document.createElement("td");
-    hoursCell.className = this.newClassName("hours-cell");
-    hoursCell.unit = "hours";
-    hoursCell.actionChanges = [10, 1];
-    hoursCell.valueSpan = document.createElement("span");
+    /**
+     *
+     * @param options
+     * @returns {Element}
+     */
+    DatetimePicker.prototype.yearMonthBlock = function (options) {
+        var self = this;
 
-    var minutesCell = document.createElement("td");
-    minutesCell.className = this.newClassName("minutes-cell");
-    minutesCell.unit = "minutes";
-    minutesCell.actionChanges = [10, 1];
-    minutesCell.valueSpan = document.createElement("span");
+        if (typeof options != "object") {
+            options = {};
+        }
 
-    var secondsCell = document.createElement("td");
-    secondsCell.className = this.newClassName("seconds-cell");
-    secondsCell.unit = "seconds";
-    secondsCell.actionChanges = [10, 1];
-    secondsCell.valueSpan = document.createElement("span");
+        var yearMonthBlock = document.createElement("table");
+        yearMonthBlock.className = createClassName("year-month-block");
 
-    [hoursCell, minutesCell, secondsCell].forEach(function (block) {
-        ["increase", "decrease"].forEach(function (action) {
-            var actRow = document.createElement("div");
-            actRow.className = self.newClassName(action + "-div");
-            block.appendChild(actRow);
-            block.actionChanges.forEach(function (change) {
-                var actSpan = document.createElement("span");
-                actRow.appendChild(actSpan);
-                actSpan.setAttribute("data-action", action);
-                actSpan.setAttribute("data-change", change);
-                actSpan.setAttribute("data-unit", block.unit);
-                actSpan.addEventListener("click", function (event) {
-                    if (action == "increase") {
-                        self.currentTime[block.unit] += change;
-                    } else {
-                        self.currentTime[block.unit] -= change;
-                    }
+        var yearMonthRow = document.createElement("tr");
+        yearMonthRow.className = createClassName("year-month-row");
+        yearMonthBlock.appendChild(yearMonthRow);
+
+        var yearCell = document.createElement("td");
+        yearCell.className = createClassName("year-cell");
+        yearCell.unit = "year";
+        yearCell.actionChanges = [100, 10, 1];
+        yearCell.valueSpan = document.createElement("span");
+
+        var monthCell = document.createElement("td");
+        monthCell.className = createClassName("month-cell");
+        monthCell.unit = "month";
+        monthCell.actionChanges = [1];
+        monthCell.valueSpan = document.createElement("span");
+
+        [yearCell, monthCell].forEach(function (block) {
+            ["increase", "decrease"].forEach(function (action) {
+                var actRow = document.createElement("div");
+                actRow.className = createClassName(action + "-div");
+                block.appendChild(actRow);
+                block.actionChanges.forEach(function (change) {
+                    var actSpan = document.createElement("span");
+                    actRow.appendChild(actSpan);
+                    actSpan.setAttribute("data-action", action);
+                    actSpan.setAttribute("data-change", change);
+                    actSpan.setAttribute("data-unit", block.unit);
+                    actSpan.addEventListener("click", function (event) {
+                        if (action == "increase") {
+                            self.current[block.unit] += change;
+                        } else {
+                            self.current[block.unit] -= change;
+                        }
+                    });
                 });
             });
+            var valueDiv = document.createElement("div");
+            valueDiv.className = createClassName("value-div");
+            valueDiv.appendChild(block.valueSpan);
+            block.insertBefore(valueDiv, block.children[1]);
         });
-        var valueDiv = document.createElement("div");
-        valueDiv.className = self.newClassName("value-div");
-        valueDiv.appendChild(block.valueSpan);
-        block.insertBefore(valueDiv, block.children[1]);
-    });
 
-    function printTime() {
-        hoursCell.valueSpan.innerHTML = self.currentTime.hours;
-        minutesCell.valueSpan.innerHTML = self.currentTime.minutes;
-        secondsCell.valueSpan.innerHTML = self.currentTime.seconds;
-    }
-
-    printTime();
-    self.currentTime.addEventListeners("change", printTime);
-
-    // Render view
-    var itemsReference = {
-        "hoursCell": hoursCell,
-        "minutesCell": minutesCell,
-        "secondsCell": secondsCell
-    };
-
-    if (!(options.items instanceof Array)) {
-        options.items = [];
-    }
-
-    var renderItem = function (container, viewItem) {
-        container.appendChild(viewItem);
-    };
-
-    this.renderItems(timeRow, options.items, itemsReference, renderItem);
-
-    // Return block
-    return timeBlock;
-};
-
-/**
- *
- * @param options
- * @returns {Element}
- */
-DatetimePicker.prototype.controlBlock = function (options) {
-    var self = this;
-
-    if (typeof options != "object") {
-        options = {};
-    }
-
-    var controlBlock = document.createElement("table");
-    controlBlock.className = this.newClassName("control-block");
-
-    var row = document.createElement("tr");
-    controlBlock.appendChild(row);
-
-    var set2nowCell = document.createElement("td");
-    set2nowCell.className = this.newClassName("set2now-cell");
-
-    var set2nowSpan = document.createElement("span");
-    set2nowCell.appendChild(set2nowSpan);
-
-    set2nowSpan.addEventListener("click", function () {
-        var now = new Date();
-        self.currentTime.year = now.getFullYear();
-        self.currentTime.month = now.getMonth();
-        self.currentTime.date = now.getDate();
-        self.currentTime.hours = now.getHours();
-        self.currentTime.minutes = now.getMinutes();
-        self.currentTime.seconds = now.getSeconds();
-    });
-
-    var resetCell = document.createElement("td");
-    resetCell.className = this.newClassName("reset-cell");
-
-    var resetSpan = document.createElement("span");
-    resetCell.appendChild(resetSpan);
-
-    resetSpan.addEventListener("click", function () {
-        self.currentTime.year = self.initTime.getFullYear();
-        self.currentTime.month = self.initTime.getMonth();
-        self.currentTime.date = self.initTime.getDate();
-        self.currentTime.hours = self.initTime.getHours();
-        self.currentTime.minutes = self.initTime.getMinutes();
-        self.currentTime.seconds = self.initTime.getSeconds();
-    });
-
-    var submitCell = document.createElement("td");
-    submitCell.className = this.newClassName("submit-cell");
-
-    var submitSpan = document.createElement("span");
-    submitCell.appendChild(submitSpan);
-
-    submitSpan.addEventListener("click", function () {
-        if (typeof options.onSubmit == "function") {
-            options.onSubmit(self.currentTime);
+        function printYearMonth() {
+            yearCell.valueSpan.innerHTML = self.current.year;
+            monthCell.valueSpan.innerHTML = self.options.months[self.current.month];
         }
-    });
 
-    // Render view
-    var itemsReference = {
-        "set2nowCell": set2nowCell,
-        "resetCell": resetCell,
-        "submitCell": submitCell
+        printYearMonth();
+        self.current.addEventListener("change", printYearMonth);
+
+        // Render view
+        var itemsReference = {
+            "yearCell": yearCell,
+            "monthCell": monthCell
+        };
+
+        if (!(options.items instanceof Array)) {
+            options.items = [];
+        }
+
+        var renderItem = function (container, viewItem) {
+            container.appendChild(viewItem);
+        };
+
+        renderItems(yearMonthRow, options.items, itemsReference, renderItem);
+
+        // Return block
+        return yearMonthBlock;
     };
 
-    if (!(options.items instanceof Array)) {
-        options.items = [];
-    }
+    /**
+     *
+     * @param options
+     * @returns {Element}
+     */
+    DatetimePicker.prototype.dateBlock = function (options) {
+        var self = this;
 
-    var renderItem = function (container, viewItem) {
-        container.appendChild(viewItem);
+        if (typeof options != "object") {
+            options = {};
+        }
+
+        if (typeof options.extendedWeeks != "object") {
+            options.extendedWeeks = {"before": 0, "after": 0};
+        } else {
+            options.extendedWeeks.before = parseInt(options.extendedWeeks.before) || 0;
+            options.extendedWeeks.after = parseInt(options.extendedWeeks.after) || 0;
+            if (options.extendedWeeks.before > 3
+                || options.extendedWeeks.before < 0
+                || options.extendedWeeks.after > 3
+                || options.extendedWeeks.after < 0
+            ) {
+                throw Error("dateBlock: \"options.extendedWeeks.before/after\" must be in range [0, 3]");
+            }
+        }
+
+        // Date block
+        var dateBlock = document.createElement("table");
+        dateBlock.className = createClassName("date-block");
+
+        var weekdayRow = document.createElement("tr");
+        weekdayRow.className = createClassName("weekday-row");
+        dateBlock.appendChild(weekdayRow);
+
+        var weekdayCell;
+        var weekdaySpan;
+        for (var i = 0; i < 7; i++) {
+            weekdayCell = document.createElement("td");
+            weekdayCell.className = createClassName("weekday-cell");
+            weekdayRow.appendChild(weekdayCell);
+
+            weekdaySpan = document.createElement("span");
+            weekdaySpan.innerHTML = self.options.weekdays[i];
+            weekdayCell.appendChild(weekdaySpan);
+        }
+
+        function printDate() {
+            // Empty calendar block without first row
+            while (dateBlock.children[1]) {
+                dateBlock.removeChild(dateBlock.children[1]);
+            }
+
+            var calendar = createCalendar(self.current.year, self.current.month, self.current.date);
+
+            var dateRow, dateCell, dateSpan;
+
+            for (var j = 0; j < calendar.length; j++) {
+                var item = calendar[j];
+                if (item.day == 0) { // Monday
+                    if (item.monthPos == -1) {
+                        if (calendar[(j + 6) + 7 * options.extendedWeeks.before].monthPos == -1) {
+                            j += 6;
+                            continue;
+                        }
+                    }
+                    if (item.monthPos == 1) {
+                        if (calendar[j - 7 * options.extendedWeeks.after].monthPos == 1) {
+                            break;
+                        }
+                    }
+                    dateRow = document.createElement("tr");
+                    dateRow.className = createClassName("date-row");
+                    dateBlock.appendChild(dateRow);
+                }
+                if (dateRow) {
+                    dateCell = document.createElement("td");
+                    dateRow.appendChild(dateCell);
+                    dateCell.className = createClassName("date-cell");
+
+                    // Marks item is today
+                    if (item.isToday) {
+                        dateCell.classList.add(createClassName("today"));
+                    }
+
+                    // Marks item is before/current/after month
+                    if (item.monthPos == -1) {
+                        dateCell.classList.add(createClassName("before-month"));
+                    } else if (item.monthPos == 1) {
+                        dateCell.classList.add(createClassName("after-month"));
+                    } else {
+                        dateCell.classList.add(createClassName("current-month"));
+                    }
+
+                    // Marks item is before/current/after date
+                    if (item.datePos == -1) {
+                        dateCell.classList.add(createClassName("before-date"));
+                    } else if (item.datePos == 1) {
+                        dateCell.classList.add(createClassName("after-date"));
+                    } else {
+                        dateCell.classList.add(createClassName("current-date"));
+                    }
+
+                    dateSpan = document.createElement("span");
+                    dateCell.appendChild(dateSpan);
+
+                    // Binds data year/month/date/day to each item
+                    dateSpan.setAttribute("data-year", item.year);
+                    dateSpan.setAttribute("data-month", item.month);
+                    dateSpan.setAttribute("data-date", item.date);
+                    dateSpan.setAttribute("data-day", item.day);
+
+                    dateSpan.innerHTML = item.date;
+                    dateSpan.addEventListener("click", function () {
+                        self.current.date = this.getAttribute("data-date");
+                        self.current.month = this.getAttribute("data-month");
+                        self.current.year = this.getAttribute("data-year");
+
+                        if (typeof options.onClick == "function") {
+                            options.onClick(self.current);
+                        }
+                    });
+                }
+            }
+        }
+
+        printDate();
+        self.current.addEventListener("change", printDate);
+
+        return dateBlock;
     };
 
-    this.renderItems(row, options.items, itemsReference, renderItem);
+    /**
+     *
+     * @param options
+     * @returns {Element}
+     */
+    DatetimePicker.prototype.timeBlock = function (options) {
+        var self = this;
 
-    // Return block
-    return controlBlock;
-};
+        if (typeof options != "object") {
+            options = {};
+        }
+
+        // Creates table for the calendar
+        var timeBlock = document.createElement("table");
+        timeBlock.className = createClassName("time-block");
+
+        var timeRow = document.createElement("tr");
+        timeRow.className = createClassName("time-row");
+        timeBlock.appendChild(timeRow);
+
+        var hoursCell = document.createElement("td");
+        hoursCell.className = createClassName("hours-cell");
+        hoursCell.unit = "hours";
+        hoursCell.actionChanges = [10, 1];
+        hoursCell.valueSpan = document.createElement("span");
+
+        var minutesCell = document.createElement("td");
+        minutesCell.className = createClassName("minutes-cell");
+        minutesCell.unit = "minutes";
+        minutesCell.actionChanges = [10, 1];
+        minutesCell.valueSpan = document.createElement("span");
+
+        var secondsCell = document.createElement("td");
+        secondsCell.className = createClassName("seconds-cell");
+        secondsCell.unit = "seconds";
+        secondsCell.actionChanges = [10, 1];
+        secondsCell.valueSpan = document.createElement("span");
+
+        [hoursCell, minutesCell, secondsCell].forEach(function (block) {
+            ["increase", "decrease"].forEach(function (action) {
+                var actRow = document.createElement("div");
+                actRow.className = createClassName(action + "-div");
+                block.appendChild(actRow);
+                block.actionChanges.forEach(function (change) {
+                    var actSpan = document.createElement("span");
+                    actRow.appendChild(actSpan);
+                    actSpan.setAttribute("data-action", action);
+                    actSpan.setAttribute("data-change", change);
+                    actSpan.setAttribute("data-unit", block.unit);
+                    actSpan.addEventListener("click", function (event) {
+                        if (action == "increase") {
+                            self.current[block.unit] += change;
+                        } else {
+                            self.current[block.unit] -= change;
+                        }
+                    });
+                });
+            });
+            var valueDiv = document.createElement("div");
+            valueDiv.className = createClassName("value-div");
+            valueDiv.appendChild(block.valueSpan);
+            block.insertBefore(valueDiv, block.children[1]);
+        });
+
+        function printTime() {
+            hoursCell.valueSpan.innerHTML = self.current.hours;
+            minutesCell.valueSpan.innerHTML = self.current.minutes;
+            secondsCell.valueSpan.innerHTML = self.current.seconds;
+        }
+
+        printTime();
+        self.current.addEventListener("change", printTime);
+
+        // Render view
+        var itemsReference = {
+            "hoursCell": hoursCell,
+            "minutesCell": minutesCell,
+            "secondsCell": secondsCell
+        };
+
+        if (!(options.items instanceof Array)) {
+            options.items = [];
+        }
+
+        var renderItem = function (container, viewItem) {
+            container.appendChild(viewItem);
+        };
+
+        renderItems(timeRow, options.items, itemsReference, renderItem);
+
+        // Return block
+        return timeBlock;
+    };
+
+    /**
+     *
+     * @param options
+     * @returns {Element}
+     */
+    DatetimePicker.prototype.controlBlock = function (options) {
+        var self = this;
+
+        if (typeof options != "object") {
+            options = {};
+        }
+
+        var controlBlock = document.createElement("table");
+        controlBlock.className = createClassName("control-block");
+
+        var row = document.createElement("tr");
+        controlBlock.appendChild(row);
+
+        var set2nowCell = document.createElement("td");
+        set2nowCell.className = createClassName("set2now-cell");
+
+        var set2nowSpan = document.createElement("span");
+        set2nowCell.appendChild(set2nowSpan);
+
+        set2nowSpan.addEventListener("click", function () {
+            self.current.time = new Date().getTime();
+        });
+
+        var resetCell = document.createElement("td");
+        resetCell.className = createClassName("reset-cell");
+
+        var resetSpan = document.createElement("span");
+        resetCell.appendChild(resetSpan);
+
+        resetSpan.addEventListener("click", function () {
+            self.current.time = self.initTime.getTime();
+        });
+
+        var submitCell = document.createElement("td");
+        submitCell.className = createClassName("submit-cell");
+
+        var submitSpan = document.createElement("span");
+        submitCell.appendChild(submitSpan);
+
+        submitSpan.addEventListener("click", function () {
+            if (typeof options.onSubmit == "function") {
+                options.onSubmit(self.current);
+            }
+        });
+
+        // Render view
+        var itemsReference = {
+            "set2nowCell": set2nowCell,
+            "resetCell": resetCell,
+            "submitCell": submitCell
+        };
+
+        if (!(options.items instanceof Array)) {
+            options.items = [];
+        }
+
+        var renderItem = function (container, viewItem) {
+            container.appendChild(viewItem);
+        };
+
+        renderItems(row, options.items, itemsReference, renderItem);
+
+        // Return block
+        return controlBlock;
+    };
+}(document);
