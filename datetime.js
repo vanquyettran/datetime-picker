@@ -121,6 +121,34 @@ var DatetimePicker = function (initTime, options) {
     !function (document) {
 
         /**
+         * walk objects and arrays
+         * @param {Object} obj
+         * @param {Function} iterator
+         * @param {Object} context
+         */
+        function each(obj, iterator, context) {
+            var i;
+
+            if (!obj) {
+                return;
+            }
+
+            if (obj.forEach) {
+                obj.forEach(iterator, context);
+            } else if (obj.length !== undefined) {
+                i = 0;
+                while (i < obj.length) {
+                    iterator.call(context, obj[i], i, obj);
+                    i++;
+                }
+            } else {
+                for (i in obj) {
+                    obj.hasOwnProperty(i) && iterator.call(context, obj[i], i, obj);
+                }
+            }
+        }
+
+        /**
          *
          * @param options
          * @returns {Element}
@@ -200,9 +228,11 @@ var DatetimePicker = function (initTime, options) {
                     block.valueChanges.forEach(function (change) {
                         var actionSpan = document.createElement("span");
                         actionRow.appendChild(actionSpan);
-                        actionSpan.setAttribute("data-action", action);
-                        actionSpan.setAttribute("data-change", change);
-                        actionSpan.setAttribute("data-unit", block.unit);
+
+                        // actionSpan.setAttribute("data-action", action);
+                        // actionSpan.setAttribute("data-change", change);
+                        // actionSpan.setAttribute("data-unit", block.unit);
+
                         actionSpan.addEventListener("click", function (event) {
                             if (action == "increase") {
                                 self.current[block.unit] += change;
@@ -280,17 +310,15 @@ var DatetimePicker = function (initTime, options) {
             weekdayRow.className = createClassName("weekday-row");
             dateBlock.appendChild(weekdayRow);
 
-            var weekdayCell;
-            var weekdaySpan;
-            for (var i = 0; i < 7; i++) {
-                weekdayCell = document.createElement("td");
+            self.options.weekdays.forEach(function (weekday) {
+                var weekdayCell = document.createElement("td");
                 weekdayCell.className = createClassName("weekday-cell");
                 weekdayRow.appendChild(weekdayCell);
 
-                weekdaySpan = document.createElement("span");
-                weekdaySpan.innerHTML = self.options.weekdays[i];
+                var weekdaySpan = document.createElement("span");
+                weekdaySpan.innerHTML = weekday;
                 weekdayCell.appendChild(weekdaySpan);
-            }
+            });
 
             function printDate() {
                 // Empty calendar block without first row
@@ -300,30 +328,36 @@ var DatetimePicker = function (initTime, options) {
 
                 var calendar = createCalendar(self.current.year, self.current.month, self.current.date);
 
-                var dateRow, dateCell, dateSpan;
+                var i, dateRow;
 
-                for (var j = 0; j < calendar.length; j++) {
-                    var item = calendar[j];
+                for (i = 0; i < calendar.length; i++) {
+                    var item = calendar[i];
+
                     if (item.day == 0) { // Monday
                         if (item.monthPos == -1) {
-                            if (calendar[(j + 6) + 7 * options.extendedWeeks.before].monthPos == -1) {
-                                j += 6;
+                            if (calendar[(i + 6) + 7 * options.extendedWeeks.before].monthPos == -1) {
+                                i += 6;
                                 continue;
                             }
                         }
                         if (item.monthPos == 1) {
-                            if (calendar[j - 7 * options.extendedWeeks.after].monthPos == 1) {
+                            if (calendar[i - 7 * options.extendedWeeks.after].monthPos == 1) {
                                 break;
                             }
                         }
                         dateRow = document.createElement("tr");
                         dateRow.className = createClassName("date-row");
                         dateBlock.appendChild(dateRow);
+                    } else if (!dateRow) {
+                        continue;
                     }
-                    if (dateRow) {
-                        dateCell = document.createElement("td");
-                        dateRow.appendChild(dateCell);
+
+                    !function (item) {
+                        var dateCell = document.createElement("td");
+                        var dateSpan = document.createElement("span");
+
                         dateCell.className = createClassName("date-cell");
+                        dateRow.appendChild(dateCell);
 
                         // Marks item is today
                         if (item.isToday) {
@@ -348,26 +382,23 @@ var DatetimePicker = function (initTime, options) {
                             dateCell.classList.add(createClassName("current-date"));
                         }
 
-                        dateSpan = document.createElement("span");
                         dateCell.appendChild(dateSpan);
 
-                        // Binds data year/month/date/day to each item
-                        dateSpan.setAttribute("data-year", item.year);
-                        dateSpan.setAttribute("data-month", item.month);
-                        dateSpan.setAttribute("data-date", item.date);
-                        dateSpan.setAttribute("data-day", item.day);
+                        // dateSpan.setAttribute("data-year", item.year);
+                        // dateSpan.setAttribute("data-month", item.month);
+                        // dateSpan.setAttribute("data-date", item.date);
+                        // dateSpan.setAttribute("data-day", item.day);
 
                         dateSpan.innerHTML = item.date;
                         dateSpan.addEventListener("click", function () {
-                            self.current.date = this.getAttribute("data-date");
-                            self.current.month = this.getAttribute("data-month");
-                            self.current.year = this.getAttribute("data-year");
-
+                            self.current.date = item.date;
+                            self.current.month = item.month;
+                            self.current.year = item.year;
                             if (typeof options.onClick == "function") {
                                 options.onClick(self.current);
                             }
                         });
-                    }
+                    }(item);
                 }
             }
 
@@ -423,9 +454,11 @@ var DatetimePicker = function (initTime, options) {
                     block.valueChanges.forEach(function (change) {
                         var actionSpan = document.createElement("span");
                         actionRow.appendChild(actionSpan);
-                        actionSpan.setAttribute("data-action", action);
-                        actionSpan.setAttribute("data-change", change);
-                        actionSpan.setAttribute("data-unit", block.unit);
+
+                        // actionSpan.setAttribute("data-action", action);
+                        // actionSpan.setAttribute("data-change", change);
+                        // actionSpan.setAttribute("data-unit", block.unit);
+
                         actionSpan.addEventListener("click", function (event) {
                             if (action == "increase") {
                                 self.current[block.unit] += change;
@@ -626,24 +659,28 @@ var DatetimePicker = function (initTime, options) {
             }
 
             threeMonths.forEach(function (theMonth, index) {
-                var date, monthPos;
+                var date, monthPos, day;
                 var maxDate = new Date(theMonth[0], theMonth[1] + 1, 0).getDate(); // date "zero" of next month
                 for (date = 1; date <= maxDate; date++) {
-                    monthPos = index - 1; // index == 1, 2 or 3
+                    monthPos = index - 1; // -1, 0, 1
+                    day = new Date(theMonth[0], theMonth[1], date).getDay();
+                    if (monthPos == -1) {
+
+                    }
                     calendar.push({
                         "year": theMonth[0],
                         "month": theMonth[1],
                         "date": date,
-                        "day": new Date(theMonth[0], theMonth[1], date).getDay(),
+                        "day": day,
                         "monthPos": monthPos,
                         "datePos":
                             monthPos != 0
                                 ? monthPos
                                 : (date - currentDate) / Math.abs(date - currentDate) || 0,
                         "isToday":
-                        theMonth[0] == now.getFullYear()
-                        && theMonth[1] == now.getMonth()
-                        && date == now.getDate()
+                            theMonth[0] == now.getFullYear()
+                            && theMonth[1] == now.getMonth()
+                            && date == now.getDate()
                     });
                 }
             });
