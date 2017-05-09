@@ -605,18 +605,20 @@ var DatetimePicker = function (initTime, options) {
                         "today": item[0] == now.getFullYear() && item[1] == now.getMonth() && i == now.getDate()
                     });
                     if (week.length == 7) {
-                        calendar.push(week);
+                        if (week.some(isCurrentMonth)) {
+                            calendar.push(week);
+                        }
                         week = [];
                     }
                 }
             }
         });
 
-        return calendar.filter(function (week) {
-            return week.some(function (item) {
-                return item.currentMonth;
-            })
-        });
+        function isCurrentMonth(item) {
+            return item.currentMonth;
+        }
+
+        return calendar;
     }
 
 }(document);
