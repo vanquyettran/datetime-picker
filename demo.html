@@ -157,9 +157,9 @@
         <input type="text" name="date" id="date">
     </form>
     <div id="datetime-container"></div>
-    <script src="datetime.js"></script>
+    <script src="datetime_picker.js"></script>
     <script>
-        var datetimePickerWidget = new DatetimePicker(
+        var widget = new DatetimePicker(
             new Date("2017/5/20 21:10:20"),
             {
                 "weekdays": ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
@@ -173,7 +173,6 @@
                     "items": ["yearCell", "monthCell"]
                 },
                 "dateBlock": {
-                    "extendedWeeks": {"before": 0, "after": 0},
                     "onClick": function (current) {}
                 },
                 "timeBlock": {
@@ -197,7 +196,7 @@
             }
         );
 
-        document.getElementById("datetime-container").appendChild(datetimePickerWidget);
+        document.getElementById("datetime-container").appendChild(widget);
     </script>
 </body>
 </html>
