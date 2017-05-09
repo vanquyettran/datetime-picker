@@ -605,7 +605,7 @@ var DatetimePicker = function (initTime, options) {
                         "today": item[0] == now.getFullYear() && item[1] == now.getMonth() && i == now.getDate()
                     });
                     if (week.length == 7) {
-                        if (week.some(isCurrentMonth)) {
+                        if (week.some(isInCurrentMonth)) {
                             calendar.push(week);
                         }
                         week = [];
@@ -614,7 +614,7 @@ var DatetimePicker = function (initTime, options) {
             }
         });
 
-        function isCurrentMonth(item) {
+        function isInCurrentMonth(item) {
             return item.currentMonth;
         }
 
