@@ -52,13 +52,13 @@
         .datetimePicker__widget span {
             display: inline-block;
         }
-        .datetimePicker__widget td.datetimePicker__date-cell.datetimePicker__current-month {
+        .datetimePicker__widget td.datetimePicker__date-cell[data-current-month="true"] {
             opacity: 1;
         }
-        .datetimePicker__widget td.datetimePicker__date-cell.datetimePicker__current-date span {
+        .datetimePicker__widget td.datetimePicker__date-cell[data-current-date="true"] span {
             background: #ddd;
         }
-        .datetimePicker__widget td.datetimePicker__date-cell.datetimePicker__today {
+        .datetimePicker__widget td.datetimePicker__date-cell[data-today="true"] {
             color: #f40;
         }
         .datetimePicker__widget .datetimePicker__submit-cell span:before,
@@ -170,7 +170,7 @@
         ).widget(
             {
                 "yearMonthBlock": {
-                    "items": ["monthCell", "yearCell"]
+                    "items": ["yearCell", "monthCell"]
                 },
                 "dateBlock": {
                     "extendedWeeks": {"before": 0, "after": 0},

@@ -328,7 +328,42 @@ var DatetimePicker = function (initTime, options) {
 
                 var calendar = createCalendar(self.current.year, self.current.month, self.current.date);
 
-                var i, dateRow;
+                calendar.forEach(function (week) {
+                    var dateRow = document.createElement("tr");
+                    dateRow.className = createClassName("date-row");
+                    dateBlock.appendChild(dateRow);
+                    week.forEach(function (item, day) {
+                        var dateCell = document.createElement("td");
+                        var dateSpan = document.createElement("span");
+
+                        dateCell.className = createClassName("date-cell");
+                        dateRow.appendChild(dateCell);
+
+                        // Marks whether item is current month, current date or today
+                        dateCell.setAttribute("data-current-month", item.currentMonth);
+                        dateCell.setAttribute("data-current-date", item.currentDate);
+                        dateCell.setAttribute("data-today", item.today);
+
+                        dateCell.appendChild(dateSpan);
+
+                        // dateSpan.setAttribute("data-year", item.year);
+                        // dateSpan.setAttribute("data-month", item.month);
+                        // dateSpan.setAttribute("data-date", item.date);
+                        // dateSpan.setAttribute("data-day", item.day);
+
+                        dateSpan.innerHTML = item.date;
+                        dateSpan.addEventListener("click", function () {
+                            self.current.year = item.year;
+                            self.current.month = item.month;
+                            self.current.date = item.date;
+                            if (typeof options.onClick == "function") {
+                                options.onClick(self.current);
+                            }
+                        });
+                    });
+                });
+
+                /*var i, dateRow;
 
                 for (i = 0; i < calendar.length; i++) {
                     var item = calendar[i];
@@ -399,7 +434,7 @@ var DatetimePicker = function (initTime, options) {
                             }
                         });
                     }(item);
-                }
+                }*/
             }
 
             printDate();
@@ -658,7 +693,7 @@ var DatetimePicker = function (initTime, options) {
                 threeMonths.push([currentYear, currentMonth + 1]);
             }
 
-            threeMonths.forEach(function (theMonth, index) {
+            /*threeMonths.forEach(function (theMonth, index) {
                 var date, monthPos, day;
                 var maxDate = new Date(theMonth[0], theMonth[1] + 1, 0).getDate(); // date "zero" of next month
                 for (date = 1; date <= maxDate; date++) {
@@ -682,6 +717,33 @@ var DatetimePicker = function (initTime, options) {
                             && theMonth[1] == now.getMonth()
                             && date == now.getDate()
                     });
+                }
+            });*/
+
+            var week = null;
+            threeMonths.forEach(function (item, index) {
+                var i, day;
+                var maxDate = new Date(item[0], item[1] + 1, 0).getDate();
+                for (i = 1; i <= maxDate; i++) {
+                    if (week === null) {
+                        day = new Date(item[0], item[1], i).getDay();
+                        if (day == 6) {
+                            week = [];
+                        }
+                    } else {
+                        week.push({
+                            "year": item[0],
+                            "month": item[1],
+                            "date": i,
+                            "currentMonth": index == 1,
+                            "currentDate": item[0] == self.current.year && item[1] == self.current.month && i == self.current.date,
+                            "today": item[0] == now.getFullYear() && item[1] == now.getMonth() && i == now.getDate()
+                        });
+                        if (week.length == 7) {
+                            calendar.push(week);
+                            week = [];
+                        }
+                    }
                 }
             });
 
